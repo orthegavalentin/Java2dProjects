@@ -59,9 +59,9 @@ public class Panel extends JPanel implements Runnable{
         alvinFermier4.setSecActivite(secteurList);
 
        personnageList.add(alvinFermier);
-       //personnageList.add(alvinFermier2);
-      /* personnageList.add(alvinFermier3);
-       personnageList.add(alvinFermier4);*/
+       personnageList.add(alvinFermier2);
+       personnageList.add(alvinFermier3);
+       personnageList.add(alvinFermier4);
        this.ferme=new Ferme(personnageList,secteurList);
 
 

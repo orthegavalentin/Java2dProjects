@@ -23,6 +23,8 @@ public class Panel extends JPanel implements Runnable{
     private final double SECTEUR_B_POSITION_Y=400;
     private final double SECTEUR_C_POSITION_X=0;
     private final double SECTEUR_C_POSITION_Y=500;
+
+    /**Un commentaire*/
     private Ferme ferme;
 
     public Panel(){

@@ -58,7 +58,7 @@ public class Fermier extends Personnage implements Serializable, Action {
             g2.drawImage(image, (int) this.positionCourantX, (int) this.positionCourantY, panel);
 
         } catch (IOException ex) {
-            System.out.println(sb.toString());
+            System.out.println(ex.toString());
         }
 
         // methode statique c une methode de la classe

@@ -22,3 +22,8 @@ public class Main {
     }
 
 }
+// git branch permet de savoir sur quelle branche on est
+// gitlog permet de créer des init
+// git statut pour savoir l'etat actuel de ton projet
+// git add ajouter dans le staging area
+// git add> git commit -m "message"> git push leNomDuRepertoire

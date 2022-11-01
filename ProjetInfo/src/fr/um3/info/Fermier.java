@@ -51,7 +51,7 @@ public class Fermier extends Personnage implements Serializable, Action {
         BufferedImage image;
         StringBuilder sb = new StringBuilder();
         sb.append(System.getProperty("user.dir"));
-        sb.append("//");
+        sb.append("\\");
         sb.append(this.cheminImage);
         try {
             image = FermeUtils.resize(ImageIO.read(new File(sb.toString())), this.taille, this.taille);

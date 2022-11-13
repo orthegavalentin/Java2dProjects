@@ -146,8 +146,10 @@ public class Fermier extends Personnage implements Serializable, Action {
         this.setActionEncours(ActionPersonnageEnum.CHANGER_SECTEUR);
 
 
+
     }
 
+    // TODO reflechir à un meilleur moyen de changer de secteur
     public void changerSecteur(Secteur nouveauSec, Panel panel) {
         if (!this.getSectActuelle().equals(nouveauSec)) {
             this.setSecAncien(this.getSectActuelle());

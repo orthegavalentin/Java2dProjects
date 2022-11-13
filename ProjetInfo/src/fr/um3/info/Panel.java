@@ -33,7 +33,7 @@ public class Panel extends JPanel implements Runnable{
 
         Rectangle2D location1= new Rectangle2D.Double();
         location1.setRect(SECTEUR_A_POSITION_X,SECTEUR_A_POSITION_Y,LARGEUR_SEC,HAUTEUR_SEC);
-        Secteur secteur=new Secteur(location1,Color.GREEN,SecteurEnum.EQUITATION);
+        Secteur secteur=new Secteur(location1,Color.CYAN,SecteurEnum.EQUITATION);
         Rectangle2D location2= new Rectangle2D.Double();
         location2.setRect(SECTEUR_B_POSITION_X,SECTEUR_B_POSITION_Y,LARGEUR_SEC,HAUTEUR_SEC);
         Secteur secteur2=new Secteur(location2,Color.PINK,SecteurEnum.POULAILLER);
@@ -59,9 +59,9 @@ public class Panel extends JPanel implements Runnable{
         alvinFermier4.setSecActivite(secteurList);
 
        personnageList.add(alvinFermier);
-       //personnageList.add(alvinFermier2);
-      /* personnageList.add(alvinFermier3);
-       personnageList.add(alvinFermier4);*/
+       personnageList.add(alvinFermier2);
+       personnageList.add(alvinFermier3);
+       personnageList.add(alvinFermier4);
        this.ferme=new Ferme(personnageList,secteurList);
 
 

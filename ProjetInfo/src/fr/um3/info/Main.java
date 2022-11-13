@@ -22,3 +22,9 @@ public class Main {
     }
 
 }
+//git add pour metrre dans le staging area
+// git commit pour mettre dans la commit area
+// git status pour connaitre l'etat
+// git branch pour connaitre sur quelle branche on est
+// git checkout pour changer de branche
+// git pull recuperer les changements

@@ -12,7 +12,8 @@ public class Panel extends JPanel implements Runnable{
     private static final int TAILLEPIX= 4;
     private static final int LARGEUR=800;
     private static final int LONGUEUR=800;
-    private static final String CHEMIN_IMAGE_FERMIER="guy1.png";
+    private static final int TAILLE_BLOC=20;
+    private static final String CHEMIN_IMAGE_FERMIER="wooden.png";
     private static final String CHEMIN_IMAGE_FERMIER_2="guy2.png";// !!!!!regarder une video sur ca!!!!!
     private Thread simulationThread;
     private final double HAUTEUR_SEC=200;
@@ -26,43 +27,13 @@ public class Panel extends JPanel implements Runnable{
 
     /**Un commentaire*/
     private Ferme ferme;
+    List<String> map;
 
     public Panel(){
         List<Personnage> personnageList=new ArrayList<>();
         List<Secteur> secteurList=new ArrayList<>();
-
-        Rectangle2D location1= new Rectangle2D.Double();
-        location1.setRect(SECTEUR_A_POSITION_X,SECTEUR_A_POSITION_Y,LARGEUR_SEC,HAUTEUR_SEC);
-        Secteur secteur=new Secteur(location1,Color.CYAN,SecteurEnum.EQUITATION);
-        Rectangle2D location2= new Rectangle2D.Double();
-        location2.setRect(SECTEUR_B_POSITION_X,SECTEUR_B_POSITION_Y,LARGEUR_SEC,HAUTEUR_SEC);
-        Secteur secteur2=new Secteur(location2,Color.PINK,SecteurEnum.POULAILLER);
-        Rectangle2D location3= new Rectangle2D.Double();
-        location3.setRect(SECTEUR_C_POSITION_X,SECTEUR_C_POSITION_Y,LARGEUR_SEC,HAUTEUR_SEC);
-        Secteur secteur3=new Secteur(location3,Color.YELLOW,SecteurEnum.ETABLE);
-        secteurList.add(secteur);
-        secteurList.add(secteur2);
-        secteurList.add(secteur3);
-
-       Personnage alvinFermier= new Fermier(20,20,Color.GREEN,40,CHEMIN_IMAGE_FERMIER,
-               1,1,TypePersonnageEnum.FERMIER,secteur);
-        Personnage alvinFermier2= new Fermier(20,20,Color.GREEN,40,CHEMIN_IMAGE_FERMIER_2,
-                1,1,TypePersonnageEnum.FERMIER,secteur);
-        Personnage alvinFermier3= new Fermier(20,20,Color.GREEN,40,CHEMIN_IMAGE_FERMIER_2,
-                1,1,TypePersonnageEnum.FERMIER,secteur2);
-        Personnage alvinFermier4= new Fermier(20,20,Color.GREEN,40,CHEMIN_IMAGE_FERMIER_2,
-                1,1,TypePersonnageEnum.FERMIER,secteur2);
-
-        alvinFermier.setSecActivite(secteurList);
-        alvinFermier2.setSecActivite(secteurList);
-        alvinFermier3.setSecActivite(secteurList);
-        alvinFermier4.setSecActivite(secteurList);
-
-       personnageList.add(alvinFermier);
-       personnageList.add(alvinFermier2);
-       personnageList.add(alvinFermier3);
-       personnageList.add(alvinFermier4);
-       this.ferme=new Ferme(personnageList,secteurList);
+         map=new ArrayList<>();
+         map=FermeUtils.generateMapFromTextFile("Map.txt");
 
 
 
@@ -76,13 +47,9 @@ public class Panel extends JPanel implements Runnable{
         g2.setColor(Color.WHITE);
         g2.fillRect(0,0,LARGEUR,LONGUEUR );
 
+        generateMap(g2,map);
 
-        for(Secteur secteur:this.ferme.getSecteurs()){
-            secteur.dessiner(g2);
-        }
-        for(Personnage personnage:this.ferme.getPersonnages()){
-            personnage.dessiner(g2,this);
-        }
+
 
 
     }
@@ -94,19 +61,59 @@ public class Panel extends JPanel implements Runnable{
 
     @Override
     public void run() {
+
         while (simulationThread!=null){
 
-            for(Personnage personnage:this.ferme.getPersonnages()){
-                personnage.bouger(this);
-                this.repaint();
-            }
 
-
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+    }
+
+    private void generateMap(Graphics2D g2,List<String> mapString){
+        int position_X=0;
+        int position_Y=0;
+
+        for(String ligne:mapString){
+
+            for(int i=0;i<ligne.length();i++){
+
+                switch(ligne.charAt(i)){
+
+                    case 'x':
+                        g2.setColor(Color.BLUE);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+                    case 'o':
+                        g2.setColor(Color.RED);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+
+                    case 'p':
+                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
+                        p1.dessiner(g2,this);
+
+                        break;
+
+
+                    default:
+                        break;
+
+
+
+                }
+                position_X+=TAILLE_BLOC;
+
+            }
+            position_X=0;
+            position_Y+=TAILLE_BLOC;
+
+
+
+
+        }
+
     }
 }

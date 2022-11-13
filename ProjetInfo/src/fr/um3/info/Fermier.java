@@ -46,6 +46,28 @@ public class Fermier extends Personnage implements Serializable, Action {
 
     }
 
+    public Fermier(int positionCourantX, int positionCourantY, Color couleur, int taille, String cheminImage
+                  ) {
+
+
+        super.positionCourantX =  positionCourantX;
+        super.positionCourantY =  positionCourantY;
+        super.couleur = couleur;
+        super.taille = taille;
+        super.cheminImage = cheminImage;
+        super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
+
+        TimerTask task = new TimerTask() {
+            public void run() {
+                Fermier.super.compteur++;
+            }
+        };
+        java.util.Timer timer = new Timer("Timer");
+        long delay = 1000L;
+        timer.scheduleAtFixedRate(task, delay, delay);
+
+    }
+
     @Override
     public void dessiner(Graphics2D g2, Panel panel) {
         BufferedImage image;
@@ -108,7 +130,7 @@ public class Fermier extends Personnage implements Serializable, Action {
             this.setVitesseY(-vitY);
 
         }
-        System.out.println("---Travailler--- " + " x =" + this.positionCourantX + " y= " + this.positionCourantY);
+
     }
 
     @Override
@@ -193,7 +215,7 @@ public class Fermier extends Personnage implements Serializable, Action {
             personnage.setPositionCourantY(personnage.getPositionCourantY() + vy * t);
             panel.repaint();
             Thread.sleep(10);
-            System.out.println("---Changer Secteur--- " + " x =" + this.positionCourantX + " y= " + this.positionCourantY);
+
             if (personnage.getPositionCourantX() >= personnage.getSectActuelle().getLocation().getMinX()
                     &&
                     personnage.getPositionCourantX() >= personnage.getSectActuelle().getLocation().getMinX()

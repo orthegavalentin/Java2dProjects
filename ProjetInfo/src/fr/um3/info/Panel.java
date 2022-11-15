@@ -90,6 +90,13 @@ public class Panel extends JPanel implements Runnable{
 
                         break;
 
+                    case 'c':
+                        g2.setColor(Color.GREEN);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+
 
                     case 'p':
                         Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);

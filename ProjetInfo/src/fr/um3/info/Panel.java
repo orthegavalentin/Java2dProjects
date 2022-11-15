@@ -67,7 +67,7 @@ public class Panel extends JPanel implements Runnable{
 
         }
     }
-
+    // Dessinner notre monde en 2D
     private void generateMap(Graphics2D g2,List<String> mapString){
         int position_X=0;
         int position_Y=0;

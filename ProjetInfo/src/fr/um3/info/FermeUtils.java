@@ -37,7 +37,8 @@ public class FermeUtils {
 
         // checking for end of file
         while (line != null) {
-            listOfStrings.add(line);
+            listOfStrings.add(line.replaceAll(",","").strip());
+            System.out.println(line.replaceAll(",","").strip());
             line = bf.readLine();
         }
 
@@ -45,6 +46,8 @@ public class FermeUtils {
         bf.close();}
        catch(IOException ex){
            System.out.println(ex.toString());
+           System.out.println("****************************************");
+           System.out.println(sb.toString());
        }
 
         return listOfStrings;

@@ -68,33 +68,67 @@ public class Panel extends JPanel implements Runnable{
         }
     }
     // Dessinner notre monde en 2D
-    private void generateMap(Graphics2D g2,List<String> mapString){
+    private void generateMap(Graphics2D g2,List<String> map){
         int position_X=0;
         int position_Y=0;
 
-        for(String ligne:mapString){
+        for(String ligne:map){
 
             for(int i=0;i<ligne.length();i++){
 
                 switch(ligne.charAt(i)){
 
-                    case 'x':
+                    case '9':
+                        g2.setColor(Color.GRAY);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+                    case '8':
+                        g2.setColor(Color.BLACK);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+                    case '7':
+                        g2.setColor(Color.GREEN);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        break;
+
+                    case '6':
+                        g2.setColor(Color.LIGHT_GRAY);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+                    case '5':
+                        g2.setColor(Color.CYAN);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+
+                    case '4':
+                        g2.setColor(Color.ORANGE);
+                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        break;
+                    case '3':
                         g2.setColor(Color.BLUE);
                         g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
 
                         break;
-
-                    case 'o':
+                    case '2':
                         g2.setColor(Color.RED);
                         g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
 
                         break;
-
-                    case 'c':
-                        g2.setColor(Color.GREEN);
+                    case '1':
+                        g2.setColor(Color.PINK);
                         g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
 
                         break;
+
+
 
 
 

@@ -13,17 +13,9 @@ public class Panel extends JPanel implements Runnable{
     private static final int LARGEUR=800;
     private static final int LONGUEUR=800;
     private static final int TAILLE_BLOC=20;
-    private static final String CHEMIN_IMAGE_FERMIER="wooden.png";
+    private static final String CHEMIN_IMAGE_FERMIER="grass-tile.png";
     private static final String CHEMIN_IMAGE_FERMIER_2="guy2.png";// !!!!!regarder une video sur ca!!!!!
     private Thread simulationThread;
-    private final double HAUTEUR_SEC=200;
-    private final double LARGEUR_SEC= 200;
-    private final double SECTEUR_A_POSITION_X=0;
-    private final double SECTEUR_A_POSITION_Y=0;
-    private final double SECTEUR_B_POSITION_X=600;
-    private final double SECTEUR_B_POSITION_Y=400;
-    private final double SECTEUR_C_POSITION_X=0;
-    private final double SECTEUR_C_POSITION_Y=500;
 
     /**Un commentaire*/
     private Ferme ferme;
@@ -91,8 +83,8 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '7':
-                        g2.setColor(Color.GREEN);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
+                        p1.dessiner(g2,this);
                         break;
 
                     case '6':
@@ -133,8 +125,8 @@ public class Panel extends JPanel implements Runnable{
 
 
                     case 'p':
-                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
-                        p1.dessiner(g2,this);
+                        Personnage p2=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
+                        p2.dessiner(g2,this);
 
                         break;
 

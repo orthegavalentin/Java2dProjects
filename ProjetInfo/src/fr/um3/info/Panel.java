@@ -1,31 +1,60 @@
 package fr.um3.info;
 
+import fr.um3.info.utils.FermeUtils;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Panel extends JPanel implements Runnable{
     private static final long serialVersionUID = 1L;
-    private static final int TAILLEPIX= 4;
-    private static final int LARGEUR=800;
-    private static final int LONGUEUR=800;
+    private static final int LARGEUR=700;
+    private static final int LONGUEUR=700;
     private static final int TAILLE_BLOC=20;
-    private static final String CHEMIN_IMAGE_FERMIER="grass-tile.png";
-    private static final String CHEMIN_IMAGE_FERMIER_2="guy2.png";// !!!!!regarder une video sur ca!!!!!
+    private static final int TAILLE_IMAGE=32;
+    private static final String CHEMIN_IMAGE_TUILES_MAP="map_spritesheet.png";
+    private static final int LONGUEUR_JEU_DE_TUILE_MAP = 958;
+    private static final int LARGEUR_JEU_DE_TUILE_MAP = 760;
+    private static final int ESPACEMENT_JEU_DE_TUILE_MAP = 1;
+
+    private static final String CHEMIN_IMAGE_TUILES_DECOR="decor_spritesheet.png";
+    private static final int LONGUEUR_JEU_DE_TUILE_DECOR = 32;
+    private static final int LARGEUR_JEU_DE_TUILE_DECOR =864 ;
+    private static final int ESPACEMENT_JEU_DE_TUILE_DECOR = 0;
+
+    private static final String CHEMIN_IMAGE_TUILES_MAP2="land_spritesheet.png";
+    private static final int LONGUEUR_JEU_DE_TUILE_MAP2 = 224;
+    private static final int LARGEUR_JEU_DE_TUILE_MAP2 =320 ;
+    private static final int ESPACEMENT_JEU_DE_TUILE_MAP2 = 0;
+
+
     private Thread simulationThread;
 
     /**Un commentaire*/
     private Ferme ferme;
     List<String> map;
+    List<String> decor;
+
+    BufferedImage [][] tuilesMap;
+    BufferedImage [][] tuilesMap2;
+    BufferedImage [][] tuilesDecor;
 
     public Panel(){
-        List<Personnage> personnageList=new ArrayList<>();
-        List<Secteur> secteurList=new ArrayList<>();
+
+        tuilesMap=FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_MAP,LONGUEUR_JEU_DE_TUILE_MAP,LARGEUR_JEU_DE_TUILE_MAP,
+                TAILLE_IMAGE,ESPACEMENT_JEU_DE_TUILE_MAP);
+
+        tuilesMap2=FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_MAP2,LONGUEUR_JEU_DE_TUILE_MAP2,LARGEUR_JEU_DE_TUILE_MAP2,
+                TAILLE_IMAGE,ESPACEMENT_JEU_DE_TUILE_MAP2);
+
+        tuilesDecor=FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_DECOR,LONGUEUR_JEU_DE_TUILE_DECOR,LARGEUR_JEU_DE_TUILE_DECOR,
+                TAILLE_IMAGE,ESPACEMENT_JEU_DE_TUILE_DECOR);
+
          map=new ArrayList<>();
-         map=FermeUtils.generateMapFromTextFile("Map.txt");
+         map= FermeUtils.generateMapFromTextFile("Map.txt");
+         decor= FermeUtils.generateMapFromTextFile("decor.txt");
 
 
 
@@ -39,7 +68,11 @@ public class Panel extends JPanel implements Runnable{
         g2.setColor(Color.WHITE);
         g2.fillRect(0,0,LARGEUR,LONGUEUR );
 
-        generateMap(g2,map);
+        generateMapOrDecor(g2,map);
+
+        generateMapOrDecor(g2,decor);
+
+
 
 
 
@@ -59,8 +92,8 @@ public class Panel extends JPanel implements Runnable{
 
         }
     }
-    // Dessinner notre monde en 2D
-    private void generateMap(Graphics2D g2,List<String> map){
+    // Dessiner notre monde en 2D
+    private void generateMapOrDecor(Graphics2D g2,List<String> map){
         int position_X=0;
         int position_Y=0;
 
@@ -71,32 +104,29 @@ public class Panel extends JPanel implements Runnable{
                 switch(ligne.charAt(i)){
 
                     case '9':
-                        g2.setColor(Color.GRAY);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
-
+                        Entite land=new Tuile(position_X,position_Y,20,tuilesMap2[0][0]);
+                        land.dessiner(g2,this);
                         break;
 
                     case '8':
-                        g2.setColor(Color.BLACK);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Entite p1=new Tuile(position_X,position_Y,20,tuilesMap[3][21]);
+                        p1.dessiner(g2,this);
 
                         break;
 
                     case '7':
-                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
-                        p1.dessiner(g2,this);
+                        Entite grass=new Tuile(position_X,position_Y,20,tuilesMap[2][1]);
+                        grass.dessiner(g2,this);
                         break;
 
                     case '6':
-                        g2.setColor(Color.LIGHT_GRAY);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
-
+                        Entite wood=new Tuile(position_X,position_Y,20,tuilesMap[3][8]);
+                        wood.dessiner(g2,this);
                         break;
 
                     case '5':
-                        g2.setColor(Color.CYAN);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
-
+                        Entite water=new Tuile(position_X,position_Y,20,tuilesMap[21][5]);
+                        water.dessiner(g2,this);
                         break;
 
                     case '4':
@@ -120,15 +150,44 @@ public class Panel extends JPanel implements Runnable{
 
                         break;
 
-
-
-
-
-                    case 'p':
-                        Personnage p2=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
-                        p2.dessiner(g2,this);
+                    case 'f':
+                        Entite flower=new Tuile(position_X,position_Y,25,tuilesMap[9][1]);
+                        flower.dessiner(g2,this);
 
                         break;
+
+                    case 'x':
+                        Entite poisson=new Tuile(position_X,position_Y,20,tuilesDecor[0][5]);
+                        poisson.dessiner(g2,this);
+
+                        break;
+                    case 't':
+                        Entite arbre=new Tuile(position_X,position_Y,40,tuilesDecor[0][0]);
+                        arbre.dessiner(g2,this);
+
+                        break;
+                    case 'i':
+                        Entite arbre1=new Tuile(position_X,position_Y,20,tuilesMap2[1][1]);
+                        arbre1.dessiner(g2,this);
+
+                        break;
+                    case 'o':
+                        Entite arbre2=new Tuile(position_X,position_Y,20,tuilesMap2[1][2]);
+                        arbre2.dessiner(g2,this);
+
+                        break;
+                    case 'k':
+                        Entite arbre3=new Tuile(position_X,position_Y,20,tuilesMap2[2][1]);
+                        arbre3.dessiner(g2,this);
+
+                        break;
+                    case 'l':
+                        Entite arbre4=new Tuile(position_X,position_Y,20,tuilesMap2[2][2]);
+                        arbre4.dessiner(g2,this);
+
+                        break;
+
+
 
 
                     default:

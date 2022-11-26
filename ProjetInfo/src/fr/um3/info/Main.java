@@ -5,8 +5,8 @@ import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Main {
-    private static final int LARGEUR=800;
-    private static final int LONGUEUR=800;
+    private static final int LARGEUR=720;
+    private static final int LONGUEUR=740;
 
     public static void main(String [] args){
         JFrame frame = new JFrame();

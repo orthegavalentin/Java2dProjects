@@ -24,7 +24,7 @@ public class Panel extends JPanel implements Runnable{
 
     private static final String CHEMIN_IMAGE_TUILES_DECOR="decor_spritesheet.png";
     private static final int LONGUEUR_JEU_DE_TUILE_DECOR = 32;
-    private static final int LARGEUR_JEU_DE_TUILE_DECOR =864 ;
+    private static final int LARGEUR_JEU_DE_TUILE_DECOR =608 ;
     private static final int ESPACEMENT_JEU_DE_TUILE_DECOR = 0;
 
     private static final String CHEMIN_IMAGE_TUILES_MAP2="land_spritesheet.png";
@@ -114,9 +114,8 @@ public class Panel extends JPanel implements Runnable{
 
                     case '8':
 
-                        Entite p1=new Tuile(position_X,position_Y,20,tuilesMap[3][21]);
-                        p1.dessiner(g2,this);
-
+                        Entite cloture=new Tuile(position_X,position_Y,20,tuilesMap[3][21]);
+                        cloture.dessiner(g2,this);
 
                         break;
 
@@ -127,8 +126,9 @@ public class Panel extends JPanel implements Runnable{
 
                     case '6':
 
-                        Entite wood=new Tuile(position_X,position_Y,20,tuilesMap[3][8]);
-                        wood.dessiner(g2,this);
+                        Entite chemin=new Tuile(position_X,position_Y,20,tuilesMap[3][15]);
+                        chemin.dessiner(g2,this);
+
                         break;
 
                     case '5':
@@ -138,23 +138,49 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '4':
-                        g2.setColor(Color.ORANGE);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Entite ecurie=new Tuile(position_X,position_Y,20,tuilesMap[13][12]);
+                        ecurie.dessiner(g2,this);
 
                         break;
+
                     case '3':
-                        g2.setColor(Color.BLUE);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Entite hangar=new Tuile(position_X,position_Y,20,tuilesMap2[1][8]);
+                        hangar.dessiner(g2,this);
 
                         break;
+
                     case '2':
-                        g2.setColor(Color.RED);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Entite entree=new Tuile(position_X,position_Y,20,tuilesDecor[0][8]);
+                        entree.dessiner(g2,this);
 
                         break;
+
                     case '1':
-                        g2.setColor(Color.PINK);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Entite enclos=new Tuile(position_X,position_Y,20,tuilesMap[6][4]);
+                        enclos.dessiner(g2,this);
+
+                        break;
+
+                    case 'a':
+                        Entite arbre=new Tuile(position_X,position_Y,30,tuilesDecor[0][1]);
+                        arbre.dessiner(g2,this);
+
+                        break;
+
+                    case 'b':
+                        Entite ble=new Tuile(position_X,position_Y,20,tuilesDecor[0][18]);
+                        ble.dessiner(g2,this);
+
+                        break;
+
+                    case 'c':
+                        Entite champignon=new Tuile(position_X,position_Y,20,tuilesDecor[0][17]);
+                        champignon.dessiner(g2,this);
+
+                        break;
+                    case 'e':
+                        Entite abriAnimaux=new Tuile(position_X,position_Y,40,tuilesDecor[0][4]);
+                        abriAnimaux.dessiner(g2,this);
 
                         break;
 
@@ -166,39 +192,82 @@ public class Panel extends JPanel implements Runnable{
 
                         break;
 
-                    case 'x':
-                        Entite poisson=new Tuile(position_X,position_Y,20,tuilesDecor[0][5]);
-                        poisson.dessiner(g2,this);
+                    case 'h':
+                        Entite horseshoe=new Tuile(position_X,position_Y,20,tuilesDecor[0][10]);
+                        horseshoe.dessiner(g2,this);
 
                         break;
-                    case 't':
-                        Entite arbre=new Tuile(position_X,position_Y,40,tuilesDecor[0][0]);
-                        arbre.dessiner(g2,this);
 
-                        break;
                     case 'i':
-                        Entite arbre1=new Tuile(position_X,position_Y,20,tuilesMap2[1][1]);
-                        arbre1.dessiner(g2,this);
+                        Entite herbe=new Tuile(position_X,position_Y,20,tuilesMap2[1][1]);
+                        herbe.dessiner(g2,this);
 
                         break;
-                    case 'o':
-                        Entite arbre2=new Tuile(position_X,position_Y,20,tuilesMap2[1][2]);
-                        arbre2.dessiner(g2,this);
+
+                    case 'j':
+                        Entite herbe1=new Tuile(position_X,position_Y,20,tuilesMap2[2][2]);
+                        herbe1.dessiner(g2,this);
 
                         break;
+
                     case 'k':
-                        Entite arbre3=new Tuile(position_X,position_Y,20,tuilesMap2[2][1]);
-                        arbre3.dessiner(g2,this);
+                        Entite herbe2=new Tuile(position_X,position_Y,20,tuilesMap2[2][1]);
+                        herbe2.dessiner(g2,this);
 
                         break;
+
                     case 'l':
-                        Entite arbre4=new Tuile(position_X,position_Y,20,tuilesMap2[2][2]);
-                        arbre4.dessiner(g2,this);
+                        Entite legumes=new Tuile(position_X,position_Y,20,tuilesDecor[0][16]);
+                        legumes.dessiner(g2,this);
 
                         break;
 
+                    case 'm':
+                        Entite maison=new Tuile(position_X,position_Y,70,tuilesDecor[0][9]);
+                        maison.dessiner(g2,this);
 
+                        break;
 
+                    case 'o':
+                        Entite herbe3=new Tuile(position_X,position_Y,20,tuilesMap2[1][2]);
+                        herbe3.dessiner(g2,this);
+
+                        break;
+
+                    case 'p':
+                        Entite pommier=new Tuile(position_X,position_Y,40,tuilesDecor[0][0]);
+                        pommier.dessiner(g2,this);
+
+                        break;
+
+                    case 's':
+                        Entite stone=new Tuile(position_X,position_Y,20,tuilesMap[14][0]);
+                        stone.dessiner(g2,this);
+
+                        break;
+
+                    case 't':
+                        Entite outil=new Tuile(position_X,position_Y,20,tuilesDecor[0][12]);
+                        outil.dessiner(g2,this);
+
+                        break;
+                    case 'v':
+                        Entite outil1=new Tuile(position_X,position_Y,20,tuilesDecor[0][14]);
+                        outil1.dessiner(g2,this);
+
+                        break;
+
+                    case 'w':
+                        Entite outil3=new Tuile(position_X,position_Y,20,tuilesDecor[0][15]);
+                        outil3.dessiner(g2,this);
+
+                        break;
+
+                    case 'x':
+                        Entite entrepot=new Tuile(position_X,position_Y,40,tuilesDecor[0][13]);
+                        entrepot.dessiner(g2,this);
+
+                        break;
 
                     default:
                         break;

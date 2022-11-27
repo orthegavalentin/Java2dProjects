@@ -1,7 +1,10 @@
 package fr.um3.info;
 
+import fr.um3.info.enums.ActionPersonnageEnum;
+import fr.um3.info.enums.TypePersonnageEnum;
+import fr.um3.info.utils.FermeUtils;
+
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,7 +31,7 @@ public class Fermier extends Personnage implements Serializable, Action {
         super.positionCourantY = (int) this.sectActuelle.getLocation().getMinY() + positionCourantY;
         super.couleur = couleur;
         super.taille = taille;
-        super.cheminImage = cheminImage;
+
         super.vitesseX = vitesseX;
         super.vitesseY = vitesseY;
         super.typePersonnage = typePersonnage;
@@ -54,7 +57,6 @@ public class Fermier extends Personnage implements Serializable, Action {
         super.positionCourantY =  positionCourantY;
         super.couleur = couleur;
         super.taille = taille;
-        super.cheminImage = cheminImage;
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 
         TimerTask task = new TimerTask() {
@@ -68,24 +70,7 @@ public class Fermier extends Personnage implements Serializable, Action {
 
     }
 
-    @Override
-    public void dessiner(Graphics2D g2, Panel panel) {
-        BufferedImage image;
-        StringBuilder sb = new StringBuilder();
-        sb.append(System.getProperty("user.dir"));
-        sb.append("\\");
-        sb.append(this.cheminImage);
-        try {
-            image = FermeUtils.resize(ImageIO.read(new File(sb.toString())), this.taille, this.taille);
-            g2.drawImage(image, (int) this.positionCourantX, (int) this.positionCourantY, panel);
 
-        } catch (IOException ex) {
-            System.out.println(sb.toString());
-        }
-
-        // methode statique c une methode de la classe
-        // methode ou variable non static c pour l'objet donc faut instancier l'objet avant de l'appeler
-    }
 
     @Override
     public String toString() {
@@ -99,7 +84,6 @@ public class Fermier extends Personnage implements Serializable, Action {
                 ", couleur=" + couleur +
                 ", vitesseX=" + vitesseX +
                 ", vitesseY=" + vitesseY +
-                ", cheminImage='" + cheminImage + '\'' +
                 '}';
     }
 

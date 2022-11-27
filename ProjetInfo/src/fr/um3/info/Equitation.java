@@ -1,5 +1,7 @@
 package fr.um3.info;
 
+import fr.um3.info.enums.SecteurEnum;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 

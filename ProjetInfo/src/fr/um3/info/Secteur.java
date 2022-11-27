@@ -1,6 +1,8 @@
 package fr.um3.info;
 
 
+import fr.um3.info.enums.SecteurEnum;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
@@ -22,8 +24,8 @@ public class Secteur implements Serializable {
         return location;
     }
 
-    public void setLocation(Rectangle2D location) {
-        location = location;
+    public void setLocation(Rectangle2D _location) {
+        this.location = _location;
     }
 
     public Color getCouleur() {

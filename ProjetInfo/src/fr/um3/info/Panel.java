@@ -4,7 +4,9 @@ import fr.um3.info.utils.FermeUtils;
 
 import javax.swing.*;
 import java.awt.*;
+
 import java.awt.image.BufferedImage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class Panel extends JPanel implements Runnable{
     private static final int LARGEUR=700;
     private static final int LONGUEUR=700;
     private static final int TAILLE_BLOC=20;
+
     private static final int TAILLE_IMAGE=32;
     private static final String CHEMIN_IMAGE_TUILES_MAP="map_spritesheet.png";
     private static final int LONGUEUR_JEU_DE_TUILE_MAP = 958;
@@ -28,6 +31,7 @@ public class Panel extends JPanel implements Runnable{
     private static final int LONGUEUR_JEU_DE_TUILE_MAP2 = 224;
     private static final int LARGEUR_JEU_DE_TUILE_MAP2 =320 ;
     private static final int ESPACEMENT_JEU_DE_TUILE_MAP2 = 0;
+
 
 
     private Thread simulationThread;
@@ -65,7 +69,7 @@ public class Panel extends JPanel implements Runnable{
     public  void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
+        g2.setColor(Color.white);
         g2.fillRect(0,0,LARGEUR,LONGUEUR );
 
         generateMapOrDecor(g2,map);
@@ -109,8 +113,10 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '8':
+
                         Entite p1=new Tuile(position_X,position_Y,20,tuilesMap[3][21]);
                         p1.dessiner(g2,this);
+
 
                         break;
 
@@ -120,6 +126,7 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '6':
+
                         Entite wood=new Tuile(position_X,position_Y,20,tuilesMap[3][8]);
                         wood.dessiner(g2,this);
                         break;
@@ -127,6 +134,7 @@ public class Panel extends JPanel implements Runnable{
                     case '5':
                         Entite water=new Tuile(position_X,position_Y,20,tuilesMap[21][5]);
                         water.dessiner(g2,this);
+
                         break;
 
                     case '4':
@@ -150,9 +158,11 @@ public class Panel extends JPanel implements Runnable{
 
                         break;
 
+
                     case 'f':
                         Entite flower=new Tuile(position_X,position_Y,25,tuilesMap[9][1]);
                         flower.dessiner(g2,this);
+
 
                         break;
 
@@ -201,11 +211,9 @@ public class Panel extends JPanel implements Runnable{
             }
             position_X=0;
             position_Y+=TAILLE_BLOC;
-
-
-
-
         }
 
     }
+
+
 }

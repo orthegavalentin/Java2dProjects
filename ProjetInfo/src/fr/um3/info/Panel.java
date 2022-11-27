@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +16,16 @@ public class Panel extends JPanel implements Runnable{
     private static final int LARGEUR=800;
     private static final int LONGUEUR=800;
     private static final int TAILLE_BLOC=20;
-    private static final String CHEMIN_IMAGE_FERMIER="wooden.png";
-    private static final String CHEMIN_IMAGE_FERMIER_2="guy2.png";// !!!!!regarder une video sur ca!!!!!
+    private static final String CHEMIN_IMAGE_FERMIER="grass-tile-3.png";
+    private static final String CHEMIN_IMAGE_FERMIER_3="brick_wall.png";
+    private static final String CHEMIN_IMAGE_FERMIER_2="chicken1.png";// !!!!!regarder une video sur ca!!!!!
+    private static final String CHEMIN_IMAGE_FERMIER_4="wooden.png";
+    private static final String CHEMIN_IMAGE_FERMIER_5="chicken1.png";
+    private static final String CHEMIN_IMAGE_FERMIER_6="chicken1.png";
+    private static final String CHEMIN_IMAGE_FERMIER_7="chicken1.png";
+    private static final String CHEMIN_IMAGE_FERMIER_8="chicken1.png";
+    private static final String CHEMIN_IMAGE_FERMIER_9="chicken1.png";
+
     private Thread simulationThread;
     private final double HAUTEUR_SEC=200;
     private final double LARGEUR_SEC= 200;
@@ -44,7 +55,7 @@ public class Panel extends JPanel implements Runnable{
     public  void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
+        g2.setColor(Color.white);
         g2.fillRect(0,0,LARGEUR,LONGUEUR );
 
         generateMap(g2,map);
@@ -85,8 +96,11 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '8':
-                        g2.setColor(Color.BLACK);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                       // g2.setColor(Color.BLACK);
+                        //g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        Personnage p3=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER_3);
+                        p3.dessiner(g2,this);
 
                         break;
 
@@ -96,14 +110,19 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case '6':
-                        g2.setColor(Color.LIGHT_GRAY);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        //g2.setColor(Color.LIGHT_GRAY);
+                        //g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        Personnage p4=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER_4);
+                        p4.dessiner(g2,this);
 
                         break;
 
                     case '5':
-                        g2.setColor(Color.CYAN);
-                        g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+                        //g2.setColor(Color.CYAN);
+                        //g2.fillRect(position_X,position_Y,TAILLE_BLOC,TAILLE_BLOC );
+
+                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
+                        p1.dessiner(g2,this);
 
                         break;
 
@@ -133,8 +152,8 @@ public class Panel extends JPanel implements Runnable{
 
 
                     case 'p':
-                        Personnage p1=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER);
-                        p1.dessiner(g2,this);
+                        Personnage p2=new Fermier(position_X,position_Y,Color.black,20,CHEMIN_IMAGE_FERMIER_2);
+                        p2.dessiner(g2,this);
 
                         break;
 
@@ -150,11 +169,9 @@ public class Panel extends JPanel implements Runnable{
             }
             position_X=0;
             position_Y+=TAILLE_BLOC;
-
-
-
-
         }
 
     }
+
+
 }

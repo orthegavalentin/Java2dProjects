@@ -28,3 +28,8 @@ public class Main {
 // git branch pour connaitre sur quelle branche on est
 // git checkout pour changer de branche
 // git pull recuperer les changements
+// git merge recuperer les changements d'un ô branche
+// git log : historique des commits
+// coding game et algo expert pour les exos en progra
+// synchronize dans threads
+//moquito ou JUnit

@@ -1,7 +1,10 @@
 package fr.um3.info.utils;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -9,6 +12,8 @@ import java.util.List;
 
 public class FermeUtils {
 
+    static AudioInputStream audioStream = null;
+    static Clip clip;
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -55,7 +60,7 @@ public class FermeUtils {
     }
 
     public static BufferedImage[][] loadTiles(String cheminImage, int longuerImage, int largeurImage, int tailleTuile,
-                                       int espacement) {
+                                              int espacement) {
         int cols = largeurImage / tailleTuile;
         int rows = longuerImage / tailleTuile;
 
@@ -65,7 +70,7 @@ public class FermeUtils {
         sb.append(System.getProperty("user.dir"));
         sb.append("\\");
         sb.append(cheminImage);
-        BufferedImage currentImage ;
+        BufferedImage currentImage;
         try {
             BufferedImage image = ImageIO.read(new File(sb.toString()));
             int x = espacement;
@@ -87,5 +92,26 @@ public class FermeUtils {
         }
         return tuiles;
 
+    }
+
+    public static void initSound(String filePath){
+        File file = new File(filePath);
+
+
+        try {
+            audioStream = AudioSystem.getAudioInputStream(file);
+            clip=  AudioSystem.getClip();
+            clip.open(audioStream);
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void playSound() {
+        clip.start();
+    }
+
+    public static void stopSound(){
+        clip.stop();
     }
 }

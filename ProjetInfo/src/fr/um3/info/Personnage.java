@@ -13,8 +13,8 @@ public abstract class Personnage extends Entite implements Action {
     protected TypePersonnageEnum typePersonnage;
     protected List<Secteur> secActivite;
     protected Color couleur;
-    protected int vitesseX;
-    protected int vitesseY;
+    protected int vitesseX=4;
+    protected int vitesseY=4;
 
 
     public int getCompteur() {

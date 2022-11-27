@@ -23,40 +23,16 @@ public class Fermier extends Personnage implements Serializable, Action {
     Thread compteurThread;
 
 
-    public Fermier(int positionCourantX, int positionCourantY, Color couleur, int taille, String cheminImage,
-                   int vitesseX, int vitesseY, TypePersonnageEnum typePersonnage, Secteur secteurActuel) {
 
-        super.sectActuelle = secteurActuel;
-        super.positionCourantX = (int) this.sectActuelle.getLocation().getMinX() + positionCourantX;
-        super.positionCourantY = (int) this.sectActuelle.getLocation().getMinY() + positionCourantY;
-        super.couleur = couleur;
-        super.taille = taille;
 
-        super.vitesseX = vitesseX;
-        super.vitesseY = vitesseY;
-        super.typePersonnage = typePersonnage;
-        super.compteur = 0;
-        super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
-
-        TimerTask task = new TimerTask() {
-            public void run() {
-                Fermier.super.compteur++;
-            }
-        };
-        java.util.Timer timer = new Timer("Timer");
-        long delay = 1000L;
-        timer.scheduleAtFixedRate(task, delay, delay);
-
-    }
-
-    public Fermier(int positionCourantX, int positionCourantY, Color couleur, int taille, String cheminImage
-                  ) {
+    public Fermier(int positionCourantX, int positionCourantY,int taille,BufferedImage image,boolean solid) {
 
 
         super.positionCourantX =  positionCourantX;
         super.positionCourantY =  positionCourantY;
-        super.couleur = couleur;
         super.taille = taille;
+        super.image=image;
+        super.collision=solid;
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 
         TimerTask task = new TimerTask() {

@@ -12,6 +12,7 @@ public abstract class Entite {
     protected float positionCourantX;
     protected float positionCourantY;
     protected int taille;
+    protected boolean collision;
     protected BufferedImage image;
 
     public float getPositionCourantX() {
@@ -45,5 +46,13 @@ public abstract class Entite {
         g2.drawImage(image, (int) this.positionCourantX, (int) this.positionCourantY, panel);
 
 
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
     }
 }

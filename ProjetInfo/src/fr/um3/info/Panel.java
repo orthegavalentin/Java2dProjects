@@ -170,6 +170,11 @@ public class Panel extends JPanel implements Runnable{
                         champignon.dessiner(g2,this);
 
                         break;
+                    case 'e':
+                        Entite abriAnimaux=new Tuile(position_X,position_Y,40,tuilesDecor[0][4]);
+                        abriAnimaux.dessiner(g2,this);
+
+                        break;
 
                     case 'f':
                         Entite flower=new Tuile(position_X,position_Y,25,tuilesMap[9][1]);
@@ -178,7 +183,7 @@ public class Panel extends JPanel implements Runnable{
                         break;
 
                     case 'h':
-                        Entite horseshoe=new Tuile(position_X,position_Y,40,tuilesDecor[0][10]);
+                        Entite horseshoe=new Tuile(position_X,position_Y,20,tuilesDecor[0][10]);
                         horseshoe.dessiner(g2,this);
 
                         break;
@@ -207,6 +212,12 @@ public class Panel extends JPanel implements Runnable{
 
                         break;
 
+                    case 'm':
+                        Entite maison=new Tuile(position_X,position_Y,70,tuilesDecor[0][9]);
+                        maison.dessiner(g2,this);
+
+                        break;
+
                     case 'o':
                         Entite herbe3=new Tuile(position_X,position_Y,20,tuilesMap2[1][2]);
                         herbe3.dessiner(g2,this);
@@ -222,6 +233,29 @@ public class Panel extends JPanel implements Runnable{
                     case 's':
                         Entite stone=new Tuile(position_X,position_Y,20,tuilesMap[14][0]);
                         stone.dessiner(g2,this);
+
+                        break;
+
+                    case 't':
+                        Entite outil=new Tuile(position_X,position_Y,20,tuilesDecor[0][12]);
+                        outil.dessiner(g2,this);
+
+                        break;
+                    case 'v':
+                        Entite outil1=new Tuile(position_X,position_Y,20,tuilesDecor[0][14]);
+                        outil1.dessiner(g2,this);
+
+                        break;
+
+                    case 'w':
+                        Entite outil3=new Tuile(position_X,position_Y,20,tuilesDecor[0][15]);
+                        outil3.dessiner(g2,this);
+
+                        break;
+
+                    case 'x':
+                        Entite entrepot=new Tuile(position_X,position_Y,40,tuilesDecor[0][13]);
+                        entrepot.dessiner(g2,this);
 
                         break;
 

@@ -1,20 +1,22 @@
 package fr.um3.info;
 
 import fr.um3.info.enums.ActionPersonnageEnum;
+import fr.um3.info.enums.DirectionEnum;
 import fr.um3.info.enums.TypePersonnageEnum;
 import fr.um3.info.utils.FermeUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -23,16 +25,19 @@ public class Fermier extends Personnage implements Serializable, Action {
     Thread compteurThread;
 
 
+    public Fermier(int positionCourantX, int positionCourantY, int taille, BufferedImage image) {
 
 
-    public Fermier(int positionCourantX, int positionCourantY,int taille,BufferedImage image,boolean solid) {
-
-
-        super.positionCourantX =  positionCourantX;
-        super.positionCourantY =  positionCourantY;
+        super.positionCourantX = positionCourantX;
+        super.positionCourantY = positionCourantY;
         super.taille = taille;
-        super.image=image;
-        super.collision=solid;
+        super.image = image;
+        super.solidArea = new Rectangle();
+        super.solidArea.x = 4;
+        super.solidArea.y = 4;
+        super.solidArea.height = 16;
+        super.solidArea.width = 16;
+
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 
         TimerTask task = new TimerTask() {
@@ -45,7 +50,6 @@ public class Fermier extends Personnage implements Serializable, Action {
         timer.scheduleAtFixedRate(task, delay, delay);
 
     }
-
 
 
     @Override
@@ -128,7 +132,6 @@ public class Fermier extends Personnage implements Serializable, Action {
         this.setActionEncours(ActionPersonnageEnum.CHANGER_SECTEUR);
 
 
-
     }
 
     // TODO reflechir à un meilleur moyen de changer de secteur
@@ -193,5 +196,95 @@ public class Fermier extends Personnage implements Serializable, Action {
         }
     }
 
+    public void searchPath(int destinationCol, int destinationRow, Panel panel) {
+        int startX = (int) this.positionCourantX / Panel.TAILLE_BLOC;
+        int startY = (int) this.positionCourantY / Panel.TAILLE_BLOC;
+        panel.pathFinder.setNodes(startX, startY, destinationCol, destinationRow);
 
+        if (panel.pathFinder.search()) {
+            int nextX = panel.pathFinder.pathList.get(0).col * Panel.TAILLE_BLOC;
+            int nextY = panel.pathFinder.pathList.get(0).row * Panel.TAILLE_BLOC;
+
+            if ((int) this.positionCourantY > nextY ) {
+                this.direction = DirectionEnum.UP;
+
+            } else if ((int) this.positionCourantY < nextY ) {
+
+                this.direction = DirectionEnum.DOWN;
+            } else if ((int) this.positionCourantX > nextX ) {
+                this.direction = DirectionEnum.LEFT;
+
+            } else if ((int) this.positionCourantX < nextX ) {
+                this.direction = DirectionEnum.RIGHT;
+            }
+            int nextCol = panel.pathFinder.pathList.get(0).col ;
+            int nextRow = panel.pathFinder.pathList.get(0).row ;
+            if(nextCol==destinationCol&&nextRow==destinationRow){
+                onPath=false;
+
+
+            }
+
+        }
+    }
+
+
+    public void allerDestination(MouseEvent e, Panel panel) {
+        this.collisionOn = false;
+        onPath=true;
+        int destinationX=e.getX()/Panel.TAILLE_BLOC;
+        int destinationY=e.getY()/Panel.TAILLE_BLOC;
+
+
+        new Thread(() -> {
+               while(onPath) {
+                   searchPath(destinationX,destinationY,panel);
+                   panel.cDetection.checkTile(this);
+                   if (!collisionOn) {
+                       switch (direction) {
+                           case UP:
+                               positionCourantY -= vitesseY;
+                               break;
+                           case DOWN:
+                               positionCourantY += vitesseY;
+                               break;
+                           case LEFT:
+                               positionCourantX -= vitesseX;
+                               break;
+                           case RIGHT:
+                               positionCourantX += vitesseX;
+                               break;
+
+                       }
+                       long startTime = System.currentTimeMillis();
+                       long currentTime = startTime;
+                       while (currentTime < startTime + 100) {
+                           try {
+                               Thread.sleep(10);
+                           } catch (InterruptedException interruptedException) {
+                               interruptedException.printStackTrace();
+                           }
+                           Thread.yield();
+                           currentTime = System.currentTimeMillis();
+                       }
+                       SwingUtilities.invokeLater(panel::repaint);
+
+                   }
+               }
+
+
+        }).start();
+
+
+    }
+
+    public List<DirectionEnum> getPath() {
+
+        return new ArrayList<>(Arrays.asList(
+                DirectionEnum.DOWN,
+                DirectionEnum.LEFT,
+                DirectionEnum.LEFT,
+                DirectionEnum.LEFT,
+                DirectionEnum.LEFT));
+    }
 }

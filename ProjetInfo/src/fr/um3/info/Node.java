@@ -2,8 +2,8 @@ package fr.um3.info;
 
 public class Node {
     Node parent;
-    private int col;
-    private int row;
+    int col;
+    int row;
     int gCost;
     int hCost;
     int fCost;
@@ -11,9 +11,9 @@ public class Node {
     boolean open;
     boolean solid;
 
-    public Node(int col,int row){
-        this.row=row;
-        this.col=col;
+    public Node(int col, int row) {
+        this.row = row;
+        this.col = col;
     }
 
 

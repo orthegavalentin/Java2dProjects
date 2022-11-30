@@ -8,13 +8,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Tuile extends Entite {
+    protected boolean collision;
     public Tuile(int positionCourantX, int positionCourantY, int taille, BufferedImage image,boolean solid) {
 
         super.positionCourantX = positionCourantX;
         super.positionCourantY = positionCourantY;
         super.taille = taille;
         super.image=image;
-        super.collision=solid;
+        this.collision=solid;
 
     }
 }

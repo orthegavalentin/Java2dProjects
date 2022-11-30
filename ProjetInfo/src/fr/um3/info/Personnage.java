@@ -1,6 +1,7 @@
 package fr.um3.info;
 
 import fr.um3.info.enums.ActionPersonnageEnum;
+import fr.um3.info.enums.DirectionEnum;
 import fr.um3.info.enums.TypePersonnageEnum;
 
 import java.awt.*;
@@ -13,8 +14,9 @@ public abstract class Personnage extends Entite implements Action {
     protected TypePersonnageEnum typePersonnage;
     protected List<Secteur> secActivite;
     protected Color couleur;
-    protected int vitesseX=4;
-    protected int vitesseY=4;
+    protected int vitesseX=20;
+    protected int vitesseY=20;
+    protected DirectionEnum direction= DirectionEnum.UP;
 
 
     public int getCompteur() {

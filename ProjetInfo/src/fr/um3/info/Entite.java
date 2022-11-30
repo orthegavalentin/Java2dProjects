@@ -12,8 +12,11 @@ public abstract class Entite {
     protected float positionCourantX;
     protected float positionCourantY;
     protected int taille;
-    protected boolean collision;
     protected BufferedImage image;
+    protected boolean onPath;
+    public Rectangle solidArea;
+    public boolean collisionOn=false;
+
 
     public float getPositionCourantX() {
         return positionCourantX;
@@ -48,11 +51,5 @@ public abstract class Entite {
 
     }
 
-    public boolean isCollision() {
-        return collision;
-    }
 
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
 }

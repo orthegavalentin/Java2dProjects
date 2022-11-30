@@ -16,7 +16,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final long serialVersionUID = 1L;
     private static final int LARGEUR = 700;
     private static final int LONGUEUR = 700;
-    private static final int TAILLE_BLOC = 20;
+    public static final int TAILLE_BLOC = 20;
     public static final int NUMBER_COLS_ROWS = 35;
 
     private static final int TAILLE_IMAGE = 32;
@@ -40,7 +40,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
 
     int FPS = 60;
-
+    public DetectionCollision cDetection =new DetectionCollision(this);
+    public PathFinder pathFinder=new PathFinder(this);
 
     private Thread simulationThread;
 
@@ -59,7 +60,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     Fermier fermier;
 
-    Entite[][] entites;
+    Tuile[][] entites;
+    boolean print=true;
 
     public Panel() {
 
@@ -77,9 +79,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         map = new ArrayList<>();
         map = FermeUtils.generateMapFromTextFile("Map.txt");
         decor = FermeUtils.generateMapFromTextFile("decor.txt");
-        entites = new Entite[35][35];
+        entites = new Tuile[35][35];
 
-        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 25, tuilesDecor[0][17], true);
+
+        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 20, tuilesDecor[0][17]);
 
 
     }
@@ -95,7 +98,23 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         generateMapOrDecor(g2, decor);
         fermier.dessiner(g2, this);
-        System.out.println("pos x "+entites[34][34].positionCourantX+" pos y"+entites[34][34].positionCourantY);
+
+        if(print){
+        for(int i=0;i<35;i++){
+            for(int j=0;j<35;j++){
+                if(entites[i][j].collision)
+                {System.out.print("0");}else{System.out.print("1");}
+
+            }
+            System.out.println("");
+
+            if(i==34)
+                print=false;
+
+        }
+
+        }
+
 
 
     }
@@ -112,6 +131,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         double delta = 0;
         double lastTime = System.nanoTime();
         double currentTime;
+
+
 
 
         while (simulationThread != null) {
@@ -135,7 +156,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private void generateMapOrDecor(Graphics2D g2, List<String> map) {
         int position_X = 0;
         int position_Y = 0;
-        Entite entite =null;
+        Tuile entite =null;
         int j=0;
 
         for (String ligne : map) {
@@ -189,8 +210,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
                     case '3':
                         //hangar
-                        Entite hangar = new Tuile(position_X, position_Y, 20, tuilesMap2[1][8], false);
-                        hangar.dessiner(g2, this);
+                        entite = new Tuile(position_X, position_Y, 20, tuilesMap2[1][8], false);
+                        entite.dessiner(g2, this);
 
                         break;
 
@@ -337,6 +358,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
                     default:
 
+
                         break;
 
 
@@ -370,8 +392,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
 
-        System.out.println("pressed mouse");
-        fermier.setPositionCourantX(fermier.getPositionCourantX() - fermier.getVitesseX());
+        fermier.allerDestination(e,this);
     }
 
     @Override

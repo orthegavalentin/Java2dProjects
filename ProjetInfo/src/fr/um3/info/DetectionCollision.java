@@ -1,5 +1,4 @@
 package fr.um3.info;
-
 public class DetectionCollision {
     Panel panel;
     public DetectionCollision(Panel panel){

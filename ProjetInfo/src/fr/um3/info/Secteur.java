@@ -12,11 +12,16 @@ public class Secteur implements Serializable {
     private Rectangle2D location;
     private Color couleur;
     private SecteurEnum typeSecteur;
+    private int porteX;
+    private int porteY;
 
-    public Secteur(Rectangle2D location,Color couleur,SecteurEnum typeSecteur){
+
+
+    public Secteur(Rectangle2D location, SecteurEnum typeSecteur, int porteX, int porteY){
         this.location=location;
-        this. couleur=couleur;
         this.typeSecteur=typeSecteur;
+        this.porteX=porteX;
+        this.porteY=porteY;
 
     }
 
@@ -42,6 +47,22 @@ public class Secteur implements Serializable {
 
     public void setTypeSecteur(SecteurEnum typeSecteur) {
         this.typeSecteur = typeSecteur;
+    }
+
+    public int getPorteX() {
+        return porteX;
+    }
+
+    public void setPorteX(int porteX) {
+        this.porteX = porteX;
+    }
+
+    public int getPorteY() {
+        return porteY;
+    }
+
+    public void setPorteY(int porteY) {
+        this.porteY = porteY;
     }
 
     public void dessiner(Graphics2D g2){

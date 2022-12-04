@@ -1,6 +1,7 @@
 package fr.um3.info;
 
 import fr.um3.info.enums.DirectionEnum;
+import fr.um3.info.enums.SecteurEnum;
 import fr.um3.info.utils.FermeUtils;
 import fr.um3.info.utils.KeyHandler;
 
@@ -10,10 +11,12 @@ import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Panel extends JPanel implements Runnable, MouseListener {
     private static final long serialVersionUID = 1L;
@@ -41,6 +44,21 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int INITIAL_FERMIER_POSITION_X = 640;
     private static final int INITIAL_FERMIER_POSITION_Y = 640;
 
+    private static final int HAUTEUR_ACCUEIL = 220;
+    private static final int LARGEUR_ACCUEIL = 220;
+    private static final int HAUTEUR_POULLAILLER = 160;
+    private static final int LARGEUR_POULLAILLER = 220;
+    private static final int SECTEUR_ACCUEIL_POSITION_X = 20;
+    private static final int SECTEUR_ACCUEIL_POSITION_Y = 20;
+    private static final int SECTEUR_POULLAILLER_POSITION_X = 20;
+    private static final int SECTEUR_POULLAILLER_POSITION_Y = 520;
+
+    private static final int PORTE_ACCUEIL_X = 100;
+    private static final int PORTE_ACCUEIL_Y = 220;
+
+    private static final int PORTE_POULLAILLER_X = 220;
+    private static final int PORTE_POULLAILLER_Y = 220;
+
 
     int FPS = 60;
     public DetectionCollision cDetection = new DetectionCollision(this);
@@ -55,6 +73,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private Ferme ferme;
     List<String> map;
     List<String> decor;
+    Map<String, List<DirectionEnum>> listesChemin;
 
     BufferedImage[][] tuilesMap;
     BufferedImage[][] tuilesMap2;
@@ -64,8 +83,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     Fermier fermier;
 
+    Visiteur visiteur;
+
+    Secteur accueil;
+    Secteur poullailler;
+
     Tuile[][] entites;
     boolean print = true;
+
+    List<Secteur> secteurList;
 
     public Panel() {
 
@@ -82,13 +108,30 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tuilesDecor = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_DECOR, LONGUEUR_JEU_DE_TUILE_DECOR, LARGEUR_JEU_DE_TUILE_DECOR,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_DECOR);
 
-        map = new ArrayList<>();
         map = FermeUtils.generateMapFromTextFile("Map.txt");
         decor = FermeUtils.generateMapFromTextFile("decor.txt");
+        listesChemin = FermeUtils.readFarmPathFromFile("paths.txt");
         entites = new Tuile[35][35];
 
 
         fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 20, tuilesDecor[0][17]);
+        Rectangle2D location1 = new Rectangle2D.Double();
+        location1.setRect(SECTEUR_ACCUEIL_POSITION_X, SECTEUR_ACCUEIL_POSITION_Y, LARGEUR_ACCUEIL, HAUTEUR_ACCUEIL);
+        accueil = new Secteur(location1, SecteurEnum.ACCUEIL,PORTE_ACCUEIL_X,PORTE_ACCUEIL_Y);
+        Rectangle2D location2 = new Rectangle2D.Double();
+        location2.setRect(SECTEUR_POULLAILLER_POSITION_X, SECTEUR_POULLAILLER_POSITION_Y, LARGEUR_POULLAILLER, HAUTEUR_POULLAILLER);
+        poullailler = new Secteur(location2, SecteurEnum.POULAILLER,PORTE_POULLAILLER_X,PORTE_POULLAILLER_Y);
+        secteurList=new ArrayList<>();
+        secteurList.add(accueil);
+        secteurList.add(poullailler);
+
+
+
+
+        visiteur=new Visiteur((int)accueil.getLocation().getMaxX(),(int)(accueil.getLocation().getMaxY()/2),20,
+                accueil,poullailler,tuilesDecor[0][17]);
+        visiteur.setSecActivite(secteurList);
+
 
 
     }
@@ -104,6 +147,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         generateMapOrDecor(g2, decor);
         fermier.dessiner(g2, this);
+        visiteur.dessiner(g2,this);
 
     }
 
@@ -132,6 +176,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 delta--;
 
 
+            }
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
 
@@ -305,9 +355,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                         //pommier
                         entite = new Tuile(position_X, position_Y, 40, tuilesDecor[0][0], true);
                         entites[j][i] = entite;
-                        entites[j][i+1] = entite;
-                        entites[j+1][i] = entite;
-                        entites[j+1][i+1] = entite;
+                        entites[j][i + 1] = entite;
+                        entites[j + 1][i] = entite;
+                        entites[j + 1][i + 1] = entite;
                         entite.dessiner(g2, this);
 
                         break;
@@ -372,44 +422,52 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void update() {
 
         if (keyHandler.upPressed) {
-            keyHandler.upPressed=false;
+            keyHandler.upPressed = false;
             fermier.setDirection(DirectionEnum.UP);
             this.cDetection.checkTile(fermier);
             if (!fermier.collisionOn)
                 fermier.setPositionCourantY(fermier.getPositionCourantY() - fermier.getVitesseY());
         }
         if (keyHandler.downPressed) {
-            keyHandler.downPressed=false;
+            keyHandler.downPressed = false;
             fermier.setDirection(DirectionEnum.DOWN);
             this.cDetection.checkTile(fermier);
             if (!fermier.collisionOn)
                 fermier.setPositionCourantY(fermier.getPositionCourantY() + fermier.getVitesseY());
         }
         if (keyHandler.leftPressed) {
-            keyHandler.leftPressed=false;
+            keyHandler.leftPressed = false;
             fermier.setDirection(DirectionEnum.LEFT);
             this.cDetection.checkTile(fermier);
             if (!fermier.collisionOn)
                 fermier.setPositionCourantX(fermier.getPositionCourantX() - fermier.getVitesseX());
         }
         if (keyHandler.rightPressed) {
-            keyHandler.rightPressed=false;
+            keyHandler.rightPressed = false;
             fermier.setDirection(DirectionEnum.RIGHT);
             this.cDetection.checkTile(fermier);
             if (!fermier.collisionOn)
                 fermier.setPositionCourantX(fermier.getPositionCourantX() + fermier.getVitesseX());
         }
+        if (keyHandler.bPressed) {
+            keyHandler.bPressed = false;
+
+
+        }
+        visiteur.bouger(this);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println(e.getX() + ", " + e.getY());
 
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
 
-        fermier.allerDestination(e, this);
+        //fermier.allerDestination(e, this);
     }
 
     @Override

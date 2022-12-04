@@ -26,28 +26,7 @@ public class Main  {
         frame.setVisible(true);
         panel.startSimulation();
         FermeUtils.initSound("animalsSound.wav");
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
 
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (String.valueOf(e.getKeyChar()).equalsIgnoreCase("p")){
-                    FermeUtils.playSound();
-                }
-
-                if (String.valueOf(e.getKeyChar()).equalsIgnoreCase("q")){
-                    FermeUtils.stopSound();
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
 
 
     }

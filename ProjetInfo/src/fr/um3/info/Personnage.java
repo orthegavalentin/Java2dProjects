@@ -9,8 +9,8 @@ import java.util.List;
 
 
 public abstract class Personnage extends Entite implements Action {
-    protected Secteur secAncien;
-    protected Secteur sectActuelle;
+    protected Secteur secteurDepart;
+    protected Secteur secteurDestination;
     protected TypePersonnageEnum typePersonnage;
     protected List<Secteur> secActivite;
     protected Color couleur;
@@ -62,12 +62,12 @@ public abstract class Personnage extends Entite implements Action {
         return secActivite;
     }
 
-    public Secteur getSecAncien() {
-        return secAncien;
+    public Secteur getSecteurDepart() {
+        return secteurDepart;
     }
 
-    public void setSecAncien(Secteur secAncien) {
-        this.secAncien = secAncien;
+    public void setSecteurDepart(Secteur secAncien) {
+        this.secteurDepart = secAncien;
     }
 
     public int getVitesseX() {
@@ -78,12 +78,12 @@ public abstract class Personnage extends Entite implements Action {
         return vitesseY;
     }
 
-    public Secteur getSectActuelle() {
-        return sectActuelle;
+    public Secteur getSecteurDestination() {
+        return this.secteurDestination;
     }
 
-    public void setSectActuelle(Secteur sectActuelle) {
-        this.sectActuelle = sectActuelle;
+    public void setSecteurDestination(Secteur sectActuelle) {
+        this.secteurDestination = sectActuelle;
     }
 
     public void setSecActivite(List<Secteur> secActivite) {

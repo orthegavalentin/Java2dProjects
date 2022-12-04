@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 public class Fermier extends Personnage implements Serializable, Action {
     public static final int INTERVAL_CHANGEMENT_ACTION = 20;
-    Thread compteurThread;
 
 
     public Fermier(int positionCourantX, int positionCourantY, int taille, BufferedImage image) {
@@ -32,11 +31,6 @@ public class Fermier extends Personnage implements Serializable, Action {
         super.positionCourantY = positionCourantY;
         super.taille = taille;
         super.image = image;
-        super.solidArea = new Rectangle();
-        super.solidArea.x = 4;
-        super.solidArea.y = 4;
-        super.solidArea.height = 16;
-        super.solidArea.width = 16;
 
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 
@@ -58,8 +52,8 @@ public class Fermier extends Personnage implements Serializable, Action {
                 "positionCourantX=" + positionCourantX +
                 ", positionCourantY=" + positionCourantY +
                 ", taille=" + taille +
-                ", secAncien=" + secAncien +
-                ", sectActuelle=" + sectActuelle +
+                ", secteurDepart=" + secteurDepart +
+                ", sectActuelle=" + secteurDestination +
                 ", secActivite=" + secActivite +
                 ", couleur=" + couleur +
                 ", vitesseX=" + vitesseX +
@@ -78,23 +72,28 @@ public class Fermier extends Personnage implements Serializable, Action {
         this.setPositionCourantX(posX + this.getVitesseX());
         this.setPositionCourantY(posY + this.getVitesseY());
 
-        if (this.getPositionCourantX() < this.getSectActuelle().getLocation().getMinX()) {
+        if (this.getPositionCourantX() < this.getSecteurDestination().getLocation().getMinX()) {
             this.setVitesseX(-vitX);
             this.setVitesseY(ThreadLocalRandom.current().nextInt(1, 4));
         }
-        if (this.getPositionCourantY() < this.getSectActuelle().getLocation().getMinY()) {
+        if (this.getPositionCourantY() < this.getSecteurDestination().getLocation().getMinY()) {
             this.setVitesseY(-vitY);
             this.setVitesseX((ThreadLocalRandom.current().nextInt(1, 4)));
         }
-        if (this.getPositionCourantX() >= this.getSectActuelle().getLocation().getMaxX() - this.taille) {
+        if (this.getPositionCourantX() >= this.getSecteurDestination().getLocation().getMaxX() - this.taille) {
             this.setVitesseX(-vitX);
 
         }
-        if (this.getPositionCourantY() >= this.getSectActuelle().getLocation().getMaxY() - this.taille) {
+        if (this.getPositionCourantY() >= this.getSecteurDestination().getLocation().getMaxY() - this.taille) {
             this.setVitesseY(-vitY);
 
         }
 
+    }
+
+    @Override
+    public void visiter() {
+        //not implemented
     }
 
     @Override
@@ -112,12 +111,17 @@ public class Fermier extends Personnage implements Serializable, Action {
                 Random rand = new Random();
                 List<Secteur> secteursVisitable = this.secActivite
                         .stream()
-                        .filter(secteur -> !this.sectActuelle.equals(secteur))
+                        .filter(secteur -> !this.secteurDepart.equals(secteur))
                         .collect(Collectors.toList());
                 this.changerSecteur(secteursVisitable.get(rand.nextInt(secteursVisitable.size())), panel);
                 break;
 
         }
+    }
+
+    @Override
+    public void changerSecteur(Panel panel) {
+
     }
 
     private void changerAction() {
@@ -127,8 +131,8 @@ public class Fermier extends Personnage implements Serializable, Action {
             return;
 
         }
-        this.setPositionCourantX((int) this.getSectActuelle().getLocation().getCenterX());
-        this.setPositionCourantY((int) this.getSectActuelle().getLocation().getCenterY());
+        this.setPositionCourantX((int) this.getSecteurDestination().getLocation().getCenterX());
+        this.setPositionCourantY((int) this.getSecteurDestination().getLocation().getCenterY());
         this.setActionEncours(ActionPersonnageEnum.CHANGER_SECTEUR);
 
 
@@ -136,9 +140,9 @@ public class Fermier extends Personnage implements Serializable, Action {
 
     // TODO reflechir à un meilleur moyen de changer de secteur
     public void changerSecteur(Secteur nouveauSec, Panel panel) {
-        if (!this.getSectActuelle().equals(nouveauSec)) {
-            this.setSecAncien(this.getSectActuelle());
-            this.setSectActuelle(nouveauSec);
+        if (!this.getSecteurDestination().equals(nouveauSec)) {
+            this.setSecteurDepart(this.getSecteurDestination());
+            this.setSecteurDestination(nouveauSec);
             if (nouveauSec.getLocation().getMinX() > this.getPositionCourantX()) {
                 if (this.getVitesseX() < 0) {
                     this.setVitesseX(this.getVitesseX() * -1);
@@ -170,8 +174,8 @@ public class Fermier extends Personnage implements Serializable, Action {
     private void changerPosition(Personnage personnage, Panel panel) throws InterruptedException {
 
 
-        float vx = (int) personnage.getSectActuelle().getLocation().getCenterX() - personnage.getPositionCourantX();
-        float vy = (int) personnage.getSectActuelle().getLocation().getCenterY() - personnage.getPositionCourantY();
+        float vx = (int) personnage.getSecteurDestination().getLocation().getCenterX() - personnage.getPositionCourantX();
+        float vy = (int) personnage.getSecteurDestination().getLocation().getCenterY() - personnage.getPositionCourantY();
         for (float t = 0.0f; t < 1.0; t += 0.0001) {
 
             personnage.setPositionCourantX(personnage.getPositionCourantX() + vx * t);
@@ -179,15 +183,15 @@ public class Fermier extends Personnage implements Serializable, Action {
             panel.repaint();
             Thread.sleep(10);
 
-            if (personnage.getPositionCourantX() >= personnage.getSectActuelle().getLocation().getMinX()
+            if (personnage.getPositionCourantX() >= personnage.getSecteurDestination().getLocation().getMinX()
                     &&
-                    personnage.getPositionCourantX() >= personnage.getSectActuelle().getLocation().getMinX()
+                    personnage.getPositionCourantX() >= personnage.getSecteurDestination().getLocation().getMinX()
                     &&
-                    personnage.getPositionCourantX() < (personnage.getSectActuelle().getLocation().getMinX() +
-                            personnage.getSectActuelle().getLocation().getWidth() - this.getTaille())
+                    personnage.getPositionCourantX() < (personnage.getSecteurDestination().getLocation().getMinX() +
+                            personnage.getSecteurDestination().getLocation().getWidth() - this.getTaille())
                     &&
-                    personnage.getPositionCourantY() < (personnage.getSectActuelle().getLocation().getMinY() +
-                            personnage.getSectActuelle().getLocation().getHeight() - this.getTaille())) {
+                    personnage.getPositionCourantY() < (personnage.getSecteurDestination().getLocation().getMinY() +
+                            personnage.getSecteurDestination().getLocation().getHeight() - this.getTaille())) {
                 this.setActionEncours(ActionPersonnageEnum.TRAVAILLER);
                 return;
             }

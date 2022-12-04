@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public boolean upPressed,downPressed,leftPressed,rightPressed;
+    public boolean upPressed,downPressed,leftPressed,rightPressed,bPressed;
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -22,6 +22,10 @@ public class KeyHandler implements KeyListener {
                 rightPressed=true;
                 break;
 
+            case "b" :
+                bPressed=true;
+                break;
+
 
         }
 
@@ -31,7 +35,13 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
+        if (String.valueOf(e.getKeyChar()).equalsIgnoreCase("p")){
+            FermeUtils.playSound();
+        }
 
+        if (String.valueOf(e.getKeyChar()).equalsIgnoreCase("x")){
+            FermeUtils.stopSound();
+        }
 
 
 

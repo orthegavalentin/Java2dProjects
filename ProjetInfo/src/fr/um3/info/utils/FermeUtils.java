@@ -1,5 +1,7 @@
 package fr.um3.info.utils;
 
+import fr.um3.info.enums.DirectionEnum;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.awt.*;
@@ -8,7 +10,9 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FermeUtils {
 
@@ -89,6 +93,64 @@ public class FermeUtils {
             e.printStackTrace();
         }
         return tuiles;
+
+    }
+
+    public static Map<String,List<DirectionEnum>> readFarmPathFromFile(String filePath){
+        // list that holds strings of a file
+
+        Map<String,List<DirectionEnum>> listesChemin=new HashMap<>();
+
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.getProperty("user.dir"));
+        sb.append("\\");
+        sb.append(filePath);
+
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(sb.toString()));
+
+            // read entire line as string
+            int numberOfLines  = Integer.parseInt(bf.readLine());
+
+
+            for(int i=0;i<numberOfLines;i++){
+                String key=bf.readLine();
+                String[] values= bf.readLine().split(",");
+                List<DirectionEnum> chemin=new ArrayList<>();
+
+                for(String value:values){
+                    if("UP".equals(value)){
+                        chemin.add(DirectionEnum.UP);
+                    }
+                    if("DOWN".equals(value)){
+                        chemin.add(DirectionEnum.DOWN);
+                    }
+                    if("LEFT".equals(value)){
+                        chemin.add(DirectionEnum.LEFT);
+                    }
+                    if("RIGHT".equals(value)){
+                        chemin.add(DirectionEnum.RIGHT);
+                    }
+
+
+                }
+
+                listesChemin.put(key,chemin);
+                
+
+
+            }
+
+            // closing bufferreader object
+            bf.close();
+        } catch (IOException ex) {
+
+        }
+
+        return listesChemin;
+
+
 
     }
 

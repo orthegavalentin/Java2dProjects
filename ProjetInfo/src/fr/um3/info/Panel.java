@@ -245,7 +245,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
                     case 'f':
                         //fleur
-                        entite = new Tuile(position_X, position_Y, 25, tuilesMap[9][1], false);
+                        entite = new Tuile(position_X, position_Y, 25, tuilesMap[9][1], true);
                         entite.dessiner(g2, this);
 
 
@@ -304,6 +304,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     case 'p':
                         //pommier
                         entite = new Tuile(position_X, position_Y, 40, tuilesDecor[0][0], true);
+                        entites[j][i] = entite;
+                        entites[j][i+1] = entite;
+                        entites[j+1][i] = entite;
+                        entites[j+1][i+1] = entite;
                         entite.dessiner(g2, this);
 
                         break;

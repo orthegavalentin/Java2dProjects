@@ -1,10 +1,13 @@
 package fr.um3.info;
 
+import fr.um3.info.enums.DirectionEnum;
 import fr.um3.info.utils.FermeUtils;
+import fr.um3.info.utils.KeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -40,8 +43,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
 
     int FPS = 60;
-    public DetectionCollision cDetection =new DetectionCollision(this);
-    public PathFinder pathFinder=new PathFinder(this);
+    public DetectionCollision cDetection = new DetectionCollision(this);
+    public PathFinder pathFinder = new PathFinder(this);
+    public KeyHandler keyHandler = new KeyHandler();
 
     private Thread simulationThread;
 
@@ -61,11 +65,13 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     Fermier fermier;
 
     Tuile[][] entites;
-    boolean print=true;
+    boolean print = true;
 
     public Panel() {
 
         this.addMouseListener(this);
+        this.addKeyListener(keyHandler);
+        this.setFocusable(true);
 
         tuilesMap = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_MAP, LONGUEUR_JEU_DE_TUILE_MAP, LARGEUR_JEU_DE_TUILE_MAP,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_MAP);
@@ -99,24 +105,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         generateMapOrDecor(g2, decor);
         fermier.dessiner(g2, this);
 
-        if(print){
-        for(int i=0;i<35;i++){
-            for(int j=0;j<35;j++){
-                if(entites[i][j].collision)
-                {System.out.print("0");}else{System.out.print("1");}
-
-            }
-            System.out.println("");
-
-            if(i==34)
-                print=false;
-
-        }
-
-        }
-
-
-
     }
 
     public void startSimulation() {
@@ -131,8 +119,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         double delta = 0;
         double lastTime = System.nanoTime();
         double currentTime;
-
-
 
 
         while (simulationThread != null) {
@@ -156,8 +142,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private void generateMapOrDecor(Graphics2D g2, List<String> map) {
         int position_X = 0;
         int position_Y = 0;
-        Tuile entite =null;
-        int j=0;
+        Tuile entite = null;
+        int j = 0;
 
         for (String ligne : map) {
 
@@ -362,16 +348,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                         break;
 
 
-
-
                 }
                 position_X += TAILLE_BLOC;
-                if(null !=entite){
-                    entites[j][i]=entite;
+                if (null != entite) {
+                    entites[j][i] = entite;
                     //System.out.println("j "+j+", "+entite.positionCourantY+" i "+i+"  "+entite.positionCourantX);
                 }
 
-                entite=null;
+                entite = null;
 
             }
             j++;
@@ -382,6 +366,35 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void update() {
+
+        if (keyHandler.upPressed) {
+            keyHandler.upPressed=false;
+            fermier.setDirection(DirectionEnum.UP);
+            this.cDetection.checkTile(fermier);
+            if (!fermier.collisionOn)
+                fermier.setPositionCourantY(fermier.getPositionCourantY() - fermier.getVitesseY());
+        }
+        if (keyHandler.downPressed) {
+            keyHandler.downPressed=false;
+            fermier.setDirection(DirectionEnum.DOWN);
+            this.cDetection.checkTile(fermier);
+            if (!fermier.collisionOn)
+                fermier.setPositionCourantY(fermier.getPositionCourantY() + fermier.getVitesseY());
+        }
+        if (keyHandler.leftPressed) {
+            keyHandler.leftPressed=false;
+            fermier.setDirection(DirectionEnum.LEFT);
+            this.cDetection.checkTile(fermier);
+            if (!fermier.collisionOn)
+                fermier.setPositionCourantX(fermier.getPositionCourantX() - fermier.getVitesseX());
+        }
+        if (keyHandler.rightPressed) {
+            keyHandler.rightPressed=false;
+            fermier.setDirection(DirectionEnum.RIGHT);
+            this.cDetection.checkTile(fermier);
+            if (!fermier.collisionOn)
+                fermier.setPositionCourantX(fermier.getPositionCourantX() + fermier.getVitesseX());
+        }
     }
 
     @Override
@@ -392,7 +405,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
 
-        fermier.allerDestination(e,this);
+        fermier.allerDestination(e, this);
     }
 
     @Override

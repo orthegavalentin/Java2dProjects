@@ -11,10 +11,10 @@ public class DetectionCollision {
         int indiceY=(int)personnage.positionCourantY/Panel.TAILLE_BLOC;
 
      switch (personnage.direction){
-         case UP :personnage.collisionOn=panel.entites[indiceX][indiceY-1].collision;break;
-         case DOWN: personnage.collisionOn=panel.entites[indiceX][indiceY+1].collision;break;
-         case LEFT: personnage.collisionOn=panel.entites[indiceX-1][indiceY].collision;break;
-         case RIGHT: personnage.collisionOn=panel.entites[indiceX+1][indiceY].collision;break;
+         case UP :personnage.collisionOn=panel.entites[indiceY-1][indiceX].collision;break;
+         case DOWN: personnage.collisionOn=panel.entites[indiceY+1][indiceX].collision;break;
+         case LEFT: personnage.collisionOn=panel.entites[indiceY][indiceX-1].collision;break;
+         case RIGHT: personnage.collisionOn=panel.entites[indiceY][indiceX+1].collision;break;
      }
 
 

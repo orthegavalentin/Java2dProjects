@@ -18,6 +18,13 @@ public abstract class Personnage extends Entite implements Action {
     protected int vitesseY=20;
     protected DirectionEnum direction= DirectionEnum.UP;
 
+    public DirectionEnum getDirection() {
+        return direction;
+    }
+
+    public void setDirection(DirectionEnum direction) {
+        this.direction = direction;
+    }
 
     public int getCompteur() {
         return compteur;

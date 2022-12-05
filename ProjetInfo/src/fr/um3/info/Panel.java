@@ -24,6 +24,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int LONGUEUR = 700;
     public static final int TAILLE_BLOC = 20;
     public static final int NUMBER_COLS_ROWS = 35;
+    public static final int NB_VISITEUR = 34;
 
     private static final int TAILLE_IMAGE = 32;
     private static final String CHEMIN_IMAGE_TUILES_MAP = "map_spritesheet.png";
@@ -46,66 +47,96 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int LARGEUR_JEU_DE_TUILE_MAP2 = 320;
     private static final int ESPACEMENT_JEU_DE_TUILE_MAP2 = 0;
 
-    private static final int INITIAL_FERMIER_POSITION_X = 640;
-    private static final int INITIAL_FERMIER_POSITION_Y = 640;
+    private static final String CHEMIN_IMAGE_TUILE_ENTITES_MOBILES = "entites_mobiles_spritesheet.png";
+    private static final int LONGUEUR_JEU_DE_TUILE_ENTITES_MOBILES = 32;
+    private static final int LARGEUR_JEU_DE_TUILE_ENTITES_MOBILES = 864;
+    private static final int ESPACEMENT_JEU_DE_TUILE_ENTITES_MOBILES = 0;
+
+    private static final int INITIAL_FERMIER_POSITION_X = 20;
+    private static final int INITIAL_FERMIER_POSITION_Y = 20;
 
     private static final int HAUTEUR_ACCUEIL = 220;
     private static final int LARGEUR_ACCUEIL = 220;
     private static final int HAUTEUR_POULLAILLER = 160;
     private static final int LARGEUR_POULLAILLER = 220;
+    private static final int HAUTEUR_EQUITATION = 160;
+    private static final int LARGEUR_EQUITATION = 220;
+    private static final int HAUTEUR_ETABLE = 160;
+    private static final int LARGEUR_ETABLE = 220;
+    private static final int HAUTEUR_PLANTATION = 160;
+    private static final int LARGEUR_PLANTATION = 220;
+
     private static final int SECTEUR_ACCUEIL_POSITION_X = 20;
     private static final int SECTEUR_ACCUEIL_POSITION_Y = 20;
     private static final int SECTEUR_POULLAILLER_POSITION_X = 20;
     private static final int SECTEUR_POULLAILLER_POSITION_Y = 520;
+    private static final int SECTEUR_EQUITATION_POSITION_X = 20;
+    private static final int SECTEUR_EQUITATION_POSITION_Y = 520;
+    private static final int SECTEUR_ETABLE_POSITION_X = 20;
+    private static final int SECTEUR_ETABLE_POSITION_Y = 520;
+    private static final int SECTEUR_PLANTATION_POSITION_X = 20;
+    private static final int SECTEUR_PLANTATION_POSITION_Y = 520;
 
     private static final int PORTE_ACCUEIL_X = 100;
     private static final int PORTE_ACCUEIL_Y = 220;
-
     private static final int PORTE_POULLAILLER_X = 220;
     private static final int PORTE_POULLAILLER_Y = 220;
+    private static final int PORTE_EQUITATION_X = 220;
+    private static final int PORTE_EQUITATION_Y = 220;
+    private static final int PORTE_ETABLE_X = 220;
+    private static final int PORTE_ETABLE_Y = 220;
+    private static final int PORTE_PLANTATION_X = 220;
+    private static final int PORTE_PLANTATION_Y = 220;
 
 
-    int FPS = 60;
+    int FPS = 60;//Frame Per Second
     public DetectionCollision cDetection = new DetectionCollision(this);
     public PathFinder pathFinder = new PathFinder(this);
     public KeyHandler keyHandler = new KeyHandler();
 
     private Thread simulationThread;
 
-    /**
-     * Un commentaire
-     */
     private Ferme ferme;
     List<String> map;
     List<String> decor;
-    Map<String, List<DirectionEnum>> listesChemin;
-
+Map<String, List<DirectionEnum>> listesChemin;//hashMap
     BufferedImage[][] tuilesMap;
     BufferedImage[][] tuilesMap2;
     BufferedImage[][] tuilesDecor;
+
     BufferedImage[][] personnages;
+
+    BufferedImage[][] tuilesEntitesMobiles;
+
 
     //Fermier
 
     Fermier fermier;
 
-    Visiteur visiteur;
+    Visiteur visiteurH;
+    Visiteur visiteurF;
 
     Secteur accueil;
     Secteur poullailler;
+    Secteur equitation;
+    Secteur etable;
+    Secteur plantation;
 
     Tuile[][] entites;
-    boolean print = true;
 
 
     List<Secteur> secteurList;
+
     List<BufferedImage> iconsFermier;
+
+    List<Visiteur> visiteurList;
+
 
     public Panel() {
 
-        this.addMouseListener(this);
-        this.addKeyListener(keyHandler);
-        this.setFocusable(true);
+        this.addMouseListener(this); //Detection de la souris
+        this.addKeyListener(keyHandler); //Detection du clavier
+        this.setFocusable(true); //Permet d'avoir le choix entre les deux detections
 
         tuilesMap = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_MAP, LONGUEUR_JEU_DE_TUILE_MAP, LARGEUR_JEU_DE_TUILE_MAP,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_MAP);
@@ -116,8 +147,13 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tuilesDecor = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_DECOR, LONGUEUR_JEU_DE_TUILE_DECOR, LARGEUR_JEU_DE_TUILE_DECOR,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_DECOR);
 
+
         personnages = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_PERSO, LONGUEUR_JEU_DE_TUILE_PERSO, LARGEUR_JEU_DE_TUILE_PERSO,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_PERSO);
+
+        tuilesEntitesMobiles = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILE_ENTITES_MOBILES, LONGUEUR_JEU_DE_TUILE_ENTITES_MOBILES, LARGEUR_JEU_DE_TUILE_ENTITES_MOBILES,
+                TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_ENTITES_MOBILES);
+
 
         map = FermeUtils.generateMapFromTextFile("Map.txt");
         decor = FermeUtils.generateMapFromTextFile("decor.txt");
@@ -128,22 +164,45 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         iconsFermier.add(personnages[0][1]);
 
 
-        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 25, personnages[0][1], iconsFermier);
+        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 20, personnages[0][1], iconsFermier);
+
         Rectangle2D location1 = new Rectangle2D.Double();
         location1.setRect(SECTEUR_ACCUEIL_POSITION_X, SECTEUR_ACCUEIL_POSITION_Y, LARGEUR_ACCUEIL, HAUTEUR_ACCUEIL);
         accueil = new Secteur(location1, SecteurEnum.ACCUEIL, PORTE_ACCUEIL_X, PORTE_ACCUEIL_Y);
         Rectangle2D location2 = new Rectangle2D.Double();
         location2.setRect(SECTEUR_POULLAILLER_POSITION_X, SECTEUR_POULLAILLER_POSITION_Y, LARGEUR_POULLAILLER, HAUTEUR_POULLAILLER);
-        poullailler = new Secteur(location2, SecteurEnum.POULAILLER, PORTE_POULLAILLER_X, PORTE_POULLAILLER_Y);
-        secteurList = new ArrayList<>();
+        poullailler = new Secteur(location2, SecteurEnum.POULAILLER,PORTE_POULLAILLER_X,PORTE_POULLAILLER_Y);
+        Rectangle2D location3 = new Rectangle2D.Double();
+        location3.setRect(SECTEUR_EQUITATION_POSITION_X, SECTEUR_EQUITATION_POSITION_Y, LARGEUR_EQUITATION, HAUTEUR_EQUITATION);
+        equitation = new Secteur(location3, SecteurEnum.EQUITATION,PORTE_EQUITATION_X,PORTE_EQUITATION_Y);
+        Rectangle2D location4 = new Rectangle2D.Double();
+        location4.setRect(SECTEUR_ETABLE_POSITION_X, SECTEUR_ETABLE_POSITION_Y, LARGEUR_ETABLE, HAUTEUR_ETABLE);
+        etable = new Secteur(location4, SecteurEnum.ETABLE,PORTE_ETABLE_X,PORTE_ETABLE_Y);
+        Rectangle2D location5 = new Rectangle2D.Double();
+        location5.setRect(SECTEUR_PLANTATION_POSITION_X, SECTEUR_PLANTATION_POSITION_Y, LARGEUR_PLANTATION, HAUTEUR_PLANTATION);
+        plantation= new Secteur(location5, SecteurEnum.PLANTATION,PORTE_PLANTATION_X,PORTE_PLANTATION_Y);
+        secteurList=new ArrayList<>();
+
         secteurList.add(accueil);
         secteurList.add(poullailler);
+        secteurList.add(equitation);
+        secteurList.add(etable);
+        secteurList.add(plantation);
+
+        visiteurList = new ArrayList<>();
+
+        for (int i= 0; i<(NB_VISITEUR/2); i++) {
+            visiteurH = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
+                    accueil, equitation, tuilesEntitesMobiles[0][15]);
+            visiteurF = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
+                    accueil, equitation, tuilesEntitesMobiles[0][25]);
+            visiteurH.setSecActivite(secteurList);
+            visiteurF.setSecActivite(secteurList);
+            visiteurList.add(visiteurF);
+            visiteurList.add(visiteurH);
 
 
-        visiteur = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
-                accueil, poullailler, tuilesDecor[0][17]);
-        visiteur.setSecActivite(secteurList);
-
+        }
 
     }
 
@@ -158,8 +217,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         generateMapOrDecor(g2, decor);
         fermier.dessiner(g2, this);
-        visiteur.dessiner(g2, this);
-
+        for(Visiteur visiteur: visiteurList) {
+            visiteur.dessiner(g2, this);
+        }
     }
 
     public void startSimulation() {
@@ -175,7 +235,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         double lastTime = System.nanoTime();
         double currentTime;
 
-
+        //Game loop
         while (simulationThread != null) {
             currentTime = System.nanoTime();
 
@@ -463,8 +523,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
 
         }
-        visiteur.bouger(this);
-
+        for(Visiteur visiteur: visiteurList) {
+            visiteur.bouger(this);
+        }
     }
 
     @Override
@@ -494,4 +555,5 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
 }

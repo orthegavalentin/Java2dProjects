@@ -103,7 +103,6 @@ public class Visiteur extends Personnage {
                 "->" +
                 this.getSecteurDestination().getTypeSecteur().toString();
         List<DirectionEnum> directions = panel.listesChemin.get(sb);
-
         new Thread(() -> {
             for (DirectionEnum cDirection : directions) {
                 //panel.cDetection.checkTile(this);
@@ -124,8 +123,9 @@ public class Visiteur extends Personnage {
 
                 }
                 long startTime = System.currentTimeMillis();
+
                 long currentTime = startTime;
-                while (currentTime < startTime + 100) {
+                while (currentTime < startTime + 100) { //Vitesse du visiteur
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException interruptedException) {

@@ -24,13 +24,14 @@ public class Fermier extends Personnage implements Serializable, Action {
     public static final int INTERVAL_CHANGEMENT_ACTION = 20;
 
 
-    public Fermier(int positionCourantX, int positionCourantY, int taille, BufferedImage image) {
+    public Fermier(int positionCourantX, int positionCourantY, int taille, BufferedImage image,List<BufferedImage> images) {
 
 
         super.positionCourantX = positionCourantX;
         super.positionCourantY = positionCourantY;
         super.taille = taille;
         super.image = image;
+        super.images=images;
 
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 

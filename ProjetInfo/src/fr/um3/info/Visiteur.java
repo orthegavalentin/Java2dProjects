@@ -20,6 +20,8 @@ public class Visiteur extends Personnage {
 
     public static final int INTERVAL_CHANGEMENT_ACTION = 20;
 
+    public boolean access=true;
+
     public Visiteur(int positionCourantX, int positionCourantY, int taille, Secteur depart,
                     Secteur destination, BufferedImage image) {
         super.positionCourantX = positionCourantX;
@@ -53,21 +55,26 @@ public class Visiteur extends Personnage {
        /* if (this.getCompteur() >= INTERVAL_CHANGEMENT_ACTION) {
             this.changerAction();
         }*/
-        switch (this.actionEncours) {
+        if(access) {
+            access=false;
+            switch (this.actionEncours) {
 
-            case VISITER:
-                this.visiter();
-                break;
+                case VISITER:
+                    this.visiter();
+                    break;
 
-            case CHANGER_SECTEUR:
-                Random rand = new Random();
-                List<Secteur> secteursVisitable = this.secActivite
-                        .stream()
-                        .filter(secteur -> !this.secteurDepart.equals(secteur))
-                        .collect(Collectors.toList());
-                this.secteurDestination = secteursVisitable.get(rand.nextInt(secteursVisitable.size()));
-                this.changerSecteur(panel);
-                break;
+                case CHANGER_SECTEUR:
+                    Random rand = new Random();
+                    List<Secteur> secteursVisitable = this.secActivite
+                            .stream()
+                            .filter(secteur -> !this.secteurDepart.equals(secteur))
+                            .collect(Collectors.toList());
+                    this.secteurDestination = secteursVisitable.get(rand.nextInt(secteursVisitable.size()));
+                    this.changerSecteur(panel);
+                    break;
+
+            }
+
 
         }
     }
@@ -129,8 +136,7 @@ public class Visiteur extends Personnage {
                 }
                 SwingUtilities.invokeLater(panel::repaint);
             }
-
-
+          access=true;
         }).start();
 
         this.setSecteurDepart(this.getSecteurDestination());

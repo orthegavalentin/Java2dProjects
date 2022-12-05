@@ -36,6 +36,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int LARGEUR_JEU_DE_TUILE_DECOR = 608;
     private static final int ESPACEMENT_JEU_DE_TUILE_DECOR = 0;
 
+    private static final String CHEMIN_IMAGE_TUILES_PERSO = "animals.png";
+    private static final int LONGUEUR_JEU_DE_TUILE_PERSO = 32;
+    private static final int LARGEUR_JEU_DE_TUILE_PERSO = 288;
+    private static final int ESPACEMENT_JEU_DE_TUILE_PERSO = 0;
+
     private static final String CHEMIN_IMAGE_TUILES_MAP2 = "land_spritesheet.png";
     private static final int LONGUEUR_JEU_DE_TUILE_MAP2 = 224;
     private static final int LARGEUR_JEU_DE_TUILE_MAP2 = 320;
@@ -78,6 +83,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     BufferedImage[][] tuilesMap;
     BufferedImage[][] tuilesMap2;
     BufferedImage[][] tuilesDecor;
+    BufferedImage[][] personnages;
 
     //Fermier
 
@@ -91,7 +97,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     Tuile[][] entites;
     boolean print = true;
 
+
     List<Secteur> secteurList;
+    List<BufferedImage> iconsFermier;
 
     public Panel() {
 
@@ -108,30 +116,33 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tuilesDecor = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_DECOR, LONGUEUR_JEU_DE_TUILE_DECOR, LARGEUR_JEU_DE_TUILE_DECOR,
                 TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_DECOR);
 
+        personnages = FermeUtils.loadTiles(CHEMIN_IMAGE_TUILES_PERSO, LONGUEUR_JEU_DE_TUILE_PERSO, LARGEUR_JEU_DE_TUILE_PERSO,
+                TAILLE_IMAGE, ESPACEMENT_JEU_DE_TUILE_PERSO);
+
         map = FermeUtils.generateMapFromTextFile("Map.txt");
         decor = FermeUtils.generateMapFromTextFile("decor.txt");
         listesChemin = FermeUtils.readFarmPathFromFile("paths.txt");
         entites = new Tuile[35][35];
+        iconsFermier=new ArrayList<>();
+        iconsFermier.add(personnages[0][0]);
+        iconsFermier.add(personnages[0][1]);
 
 
-        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 20, tuilesDecor[0][17]);
+        fermier = new Fermier(INITIAL_FERMIER_POSITION_X, INITIAL_FERMIER_POSITION_Y, 25, personnages[0][1], iconsFermier);
         Rectangle2D location1 = new Rectangle2D.Double();
         location1.setRect(SECTEUR_ACCUEIL_POSITION_X, SECTEUR_ACCUEIL_POSITION_Y, LARGEUR_ACCUEIL, HAUTEUR_ACCUEIL);
-        accueil = new Secteur(location1, SecteurEnum.ACCUEIL,PORTE_ACCUEIL_X,PORTE_ACCUEIL_Y);
+        accueil = new Secteur(location1, SecteurEnum.ACCUEIL, PORTE_ACCUEIL_X, PORTE_ACCUEIL_Y);
         Rectangle2D location2 = new Rectangle2D.Double();
         location2.setRect(SECTEUR_POULLAILLER_POSITION_X, SECTEUR_POULLAILLER_POSITION_Y, LARGEUR_POULLAILLER, HAUTEUR_POULLAILLER);
-        poullailler = new Secteur(location2, SecteurEnum.POULAILLER,PORTE_POULLAILLER_X,PORTE_POULLAILLER_Y);
-        secteurList=new ArrayList<>();
+        poullailler = new Secteur(location2, SecteurEnum.POULAILLER, PORTE_POULLAILLER_X, PORTE_POULLAILLER_Y);
+        secteurList = new ArrayList<>();
         secteurList.add(accueil);
         secteurList.add(poullailler);
 
 
-
-
-        visiteur=new Visiteur((int)accueil.getLocation().getMaxX(),(int)(accueil.getLocation().getMaxY()/2),20,
-                accueil,poullailler,tuilesDecor[0][17]);
+        visiteur = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
+                accueil, poullailler, tuilesDecor[0][17]);
         visiteur.setSecActivite(secteurList);
-
 
 
     }
@@ -147,7 +158,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         generateMapOrDecor(g2, decor);
         fermier.dessiner(g2, this);
-        visiteur.dessiner(g2,this);
+        visiteur.dessiner(g2, this);
 
     }
 
@@ -176,12 +187,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 delta--;
 
 
-            }
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
 
 
@@ -439,15 +444,19 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             keyHandler.leftPressed = false;
             fermier.setDirection(DirectionEnum.LEFT);
             this.cDetection.checkTile(fermier);
-            if (!fermier.collisionOn)
+            if (!fermier.collisionOn) {
+                fermier.setImage(fermier.getImages().get(0));
                 fermier.setPositionCourantX(fermier.getPositionCourantX() - fermier.getVitesseX());
+            }
         }
         if (keyHandler.rightPressed) {
             keyHandler.rightPressed = false;
             fermier.setDirection(DirectionEnum.RIGHT);
             this.cDetection.checkTile(fermier);
-            if (!fermier.collisionOn)
+            if (!fermier.collisionOn) {
+                fermier.setImage(fermier.getImages().get(1));
                 fermier.setPositionCourantX(fermier.getPositionCourantX() + fermier.getVitesseX());
+            }
         }
         if (keyHandler.bPressed) {
             keyHandler.bPressed = false;

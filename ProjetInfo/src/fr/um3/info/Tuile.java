@@ -17,5 +17,7 @@ public class Tuile extends Entite {
         super.image=image;
         this.collision=solid;
 
+        
+
     }
 }

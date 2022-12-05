@@ -48,16 +48,34 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int LARGEUR_ACCUEIL = 220;
     private static final int HAUTEUR_POULLAILLER = 160;
     private static final int LARGEUR_POULLAILLER = 220;
+    private static final int HAUTEUR_EQUITATION = 160;
+    private static final int LARGEUR_EQUITATION = 220;
+    private static final int HAUTEUR_ETABLE = 160;
+    private static final int LARGEUR_ETABLE = 220;
+    private static final int HAUTEUR_PLANTATION = 160;
+    private static final int LARGEUR_PLANTATION = 220;
+
     private static final int SECTEUR_ACCUEIL_POSITION_X = 20;
     private static final int SECTEUR_ACCUEIL_POSITION_Y = 20;
     private static final int SECTEUR_POULLAILLER_POSITION_X = 20;
     private static final int SECTEUR_POULLAILLER_POSITION_Y = 520;
+    private static final int SECTEUR_EQUITATION_POSITION_X = 20;
+    private static final int SECTEUR_EQUITATION_POSITION_Y = 520;
+    private static final int SECTEUR_ETABLE_POSITION_X = 20;
+    private static final int SECTEUR_ETABLE_POSITION_Y = 520;
+    private static final int SECTEUR_PLANTATION_POSITION_X = 20;
+    private static final int SECTEUR_PLANTATION_POSITION_Y = 520;
 
     private static final int PORTE_ACCUEIL_X = 100;
     private static final int PORTE_ACCUEIL_Y = 220;
-
     private static final int PORTE_POULLAILLER_X = 220;
     private static final int PORTE_POULLAILLER_Y = 220;
+    private static final int PORTE_EQUITATION_X = 220;
+    private static final int PORTE_EQUITATION_Y = 220;
+    private static final int PORTE_ETABLE_X = 220;
+    private static final int PORTE_ETABLE_Y = 220;
+    private static final int PORTE_PLANTATION_X = 220;
+    private static final int PORTE_PLANTATION_Y = 220;
 
 
     int FPS = 60;
@@ -87,6 +105,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     Secteur accueil;
     Secteur poullailler;
+    Secteur equitation;
+    Secteur etable;
+    Secteur plantation;
 
     Tuile[][] entites;
     boolean print = true;
@@ -121,15 +142,27 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         Rectangle2D location2 = new Rectangle2D.Double();
         location2.setRect(SECTEUR_POULLAILLER_POSITION_X, SECTEUR_POULLAILLER_POSITION_Y, LARGEUR_POULLAILLER, HAUTEUR_POULLAILLER);
         poullailler = new Secteur(location2, SecteurEnum.POULAILLER,PORTE_POULLAILLER_X,PORTE_POULLAILLER_Y);
+        Rectangle2D location3 = new Rectangle2D.Double();
+        location3.setRect(SECTEUR_EQUITATION_POSITION_X, SECTEUR_EQUITATION_POSITION_Y, LARGEUR_EQUITATION, HAUTEUR_EQUITATION);
+        equitation = new Secteur(location3, SecteurEnum.EQUITATION,PORTE_EQUITATION_X,PORTE_EQUITATION_Y);
+        Rectangle2D location4 = new Rectangle2D.Double();
+        location4.setRect(SECTEUR_ETABLE_POSITION_X, SECTEUR_ETABLE_POSITION_Y, LARGEUR_ETABLE, HAUTEUR_ETABLE);
+        etable = new Secteur(location4, SecteurEnum.ETABLE,PORTE_ETABLE_X,PORTE_ETABLE_Y);
+        Rectangle2D location5 = new Rectangle2D.Double();
+        location5.setRect(SECTEUR_PLANTATION_POSITION_X, SECTEUR_PLANTATION_POSITION_Y, LARGEUR_PLANTATION, HAUTEUR_PLANTATION);
+        plantation= new Secteur(location5, SecteurEnum.PLANTATION,PORTE_PLANTATION_X,PORTE_PLANTATION_Y);
         secteurList=new ArrayList<>();
         secteurList.add(accueil);
         secteurList.add(poullailler);
+        secteurList.add(equitation);
+        secteurList.add(etable);
+        secteurList.add(plantation);
 
 
 
 
         visiteur=new Visiteur((int)accueil.getLocation().getMaxX(),(int)(accueil.getLocation().getMaxY()/2),20,
-                accueil,poullailler,tuilesDecor[0][17]);
+                accueil,equitation,tuilesDecor[0][17]);
         visiteur.setSecActivite(secteurList);
 
 

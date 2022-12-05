@@ -24,7 +24,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static final int LONGUEUR = 700;
     public static final int TAILLE_BLOC = 20;
     public static final int NUMBER_COLS_ROWS = 35;
-    public static final int NB_VISITEUR = 35;
+    public static final int NB_VISITEUR = 34;
 
     private static final int TAILLE_IMAGE = 32;
     private static final String CHEMIN_IMAGE_TUILES_MAP = "map_spritesheet.png";
@@ -94,7 +94,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private Ferme ferme;
     List<String> map;
     List<String> decor;
-    List<String> entitesMobiles;
 Map<String, List<DirectionEnum>> listesChemin;//hashMap
     BufferedImage[][] tuilesMap;
     BufferedImage[][] tuilesMap2;
@@ -105,7 +104,8 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
 
     Fermier fermier;
 
-    Visiteur visiteur;
+    Visiteur visiteurH;
+    Visiteur visiteurF;
 
     Secteur accueil;
     Secteur poullailler;
@@ -167,11 +167,15 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
 
         visiteurList = new ArrayList<>();
 
-        for (int i= 0; i<NB_VISITEUR; i++) {
-            visiteur = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
+        for (int i= 0; i<(NB_VISITEUR/2); i++) {
+            visiteurH = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
                     accueil, equitation, tuilesEntitesMobiles[0][15]);
-            visiteur.setSecActivite(secteurList);
-            visiteurList.add(visiteur);
+            visiteurF = new Visiteur((int) accueil.getLocation().getMaxX(), (int) (accueil.getLocation().getMaxY() / 2), 20,
+                    accueil, equitation, tuilesEntitesMobiles[0][25]);
+            visiteurH.setSecActivite(secteurList);
+            visiteurF.setSecActivite(secteurList);
+            visiteurList.add(visiteurF);
+            visiteurList.add(visiteurH);
 
         }
 

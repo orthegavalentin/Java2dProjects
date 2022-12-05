@@ -35,14 +35,6 @@ public class Fermier extends Personnage implements Serializable, Action {
 
         super.actionEncours = ActionPersonnageEnum.CHANGER_SECTEUR;
 
-        TimerTask task = new TimerTask() {
-            public void run() {
-                Fermier.super.compteur++;
-            }
-        };
-        java.util.Timer timer = new Timer("Timer");
-        long delay = 1000L;
-        timer.scheduleAtFixedRate(task, delay, delay);
 
     }
 
@@ -64,31 +56,7 @@ public class Fermier extends Personnage implements Serializable, Action {
 
     @Override
     public void travailler() {
-        float posX = this.getPositionCourantX();
-        float posY = this.getPositionCourantY();
-        int vitY = this.getVitesseY();
-        int vitX = this.getVitesseX();
-
-
-        this.setPositionCourantX(posX + this.getVitesseX());
-        this.setPositionCourantY(posY + this.getVitesseY());
-
-        if (this.getPositionCourantX() < this.getSecteurDestination().getLocation().getMinX()) {
-            this.setVitesseX(-vitX);
-            this.setVitesseY(ThreadLocalRandom.current().nextInt(1, 4));
-        }
-        if (this.getPositionCourantY() < this.getSecteurDestination().getLocation().getMinY()) {
-            this.setVitesseY(-vitY);
-            this.setVitesseX((ThreadLocalRandom.current().nextInt(1, 4)));
-        }
-        if (this.getPositionCourantX() >= this.getSecteurDestination().getLocation().getMaxX() - this.taille) {
-            this.setVitesseX(-vitX);
-
-        }
-        if (this.getPositionCourantY() >= this.getSecteurDestination().getLocation().getMaxY() - this.taille) {
-            this.setVitesseY(-vitY);
-
-        }
+    //TODO
 
     }
 

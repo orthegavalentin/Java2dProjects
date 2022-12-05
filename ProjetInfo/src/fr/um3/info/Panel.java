@@ -130,6 +130,7 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
     List<BufferedImage> iconsFermier;
 
     List<Visiteur> visiteurList;
+    Animal poule;
 
 
     public Panel() {
@@ -181,6 +182,8 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
         Rectangle2D location5 = new Rectangle2D.Double();
         location5.setRect(SECTEUR_PLANTATION_POSITION_X, SECTEUR_PLANTATION_POSITION_Y, LARGEUR_PLANTATION, HAUTEUR_PLANTATION);
         plantation= new Secteur(location5, SecteurEnum.PLANTATION,PORTE_PLANTATION_X,PORTE_PLANTATION_Y);
+
+        poule=new Animal(SECTEUR_POULLAILLER_POSITION_X+20, SECTEUR_POULLAILLER_POSITION_Y+20,20,personnages[0][4],poullailler);
         secteurList=new ArrayList<>();
 
         secteurList.add(accueil);
@@ -220,6 +223,7 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
         for(Visiteur visiteur: visiteurList) {
             visiteur.dessiner(g2, this);
         }
+        poule.dessiner(g2,this);
     }
 
     public void startSimulation() {
@@ -526,6 +530,8 @@ Map<String, List<DirectionEnum>> listesChemin;//hashMap
         for(Visiteur visiteur: visiteurList) {
             visiteur.bouger(this);
         }
+        poule.bouger(this);
+
     }
 
     @Override
